@@ -21,4 +21,15 @@
 #define QUIT_GAME "quit_game"
 
 #define MUSIC_ON_KEY "music_on_key"
+
+#define DIALOG_BG "popuplayer/dialog_bg.png"
+#define BUTTON_BG1 "popuplayer/button_bg1.png"
+#define BUTTON_BG2 "popuplayer/button_bg2.png"
+#define BUTTON_BG3 "popuplayer/button_bg3.png"
+
+#define DIALOG_TITLE "dialog_title"
+#define DIALOG_CONTENT "dialog_content"
+#define OK "yes"
+#define CANCEL "no"
+
 #endif

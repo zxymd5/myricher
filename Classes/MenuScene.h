@@ -4,6 +4,7 @@
 #include "cocos2d.h"
 #include "cocos-ext.h"
 #include "ConstUtil.h"
+#include "popupLayer/PopupLayer.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -33,6 +34,8 @@ private:
 	void menuTouchDown(Object *pSender, Control::EventType event);
 	void addBackgroundSprite();
 	void addMenuSprites();
+	void popupQuitLayer();
+	void quitButtonCallback(Node *pNode);
 };
 
 

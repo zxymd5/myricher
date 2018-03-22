@@ -57,6 +57,7 @@ void MenuScene::menuTouchDown(Object *pSender, Control::EventType event)
 	case Btn_Quit_Game_TAG:
 	{
 		log("quit game");
+		popupQuitLayer();
 		break;
 	}
 	case Btn_Load_Game_TAG:
@@ -160,4 +161,28 @@ void MenuScene::addMenuSprites()
 	quitGameBtn->addTargetWithActionForControlEvents(this, cccontrol_selector(MenuScene::menuTouchDown), Control::EventType::TOUCH_DOWN);
 	quitGameBtn->setTag(Btn_Quit_Game_TAG);
 	addChild(quitGameBtn);
+}
+
+void MenuScene::popupQuitLayer()
+{
+	PopupLayer *popDialog = PopupLayer::create(DIALOG_BG);
+	popDialog->setContentSize(CCSizeMake(Quit_Dialog_Size_Width, Quit_Dialog_Size_Height));
+	popDialog->setTitle(DIALOG_TITLE);
+	popDialog->setContentText(DIALOG_CONTENT, 20, 60, 250);
+	popDialog->setCallbackFunc(this, callfuncN_selector(MenuScene::quitButtonCallback));
+	popDialog->addButton(BUTTON_BG1, BUTTON_BG3, OK, Btn_Quit_OK_TAG);
+	popDialog->addButton(BUTTON_BG2, BUTTON_BG3, CANCEL, Btn_Quit_Cancel_TAG);
+	this->addChild(popDialog);
+}
+
+void MenuScene::quitButtonCallback(Node *pNode)
+{
+	if (pNode->getTag() == Btn_Quit_OK_TAG)
+	{
+		Director::getInstance()->end();
+	}
+	else
+	{
+		pNode->getParent()->getParent()->removeFromParent();
+	}
 }
