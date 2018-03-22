@@ -78,6 +78,7 @@ void SplashScene::startMoveSprite(float dt)
 void SplashScene::gotoMenuScene()
 {
 	log("goto MenuScene");
+	Director::getInstance()->replaceScene(MenuScene::createScene());
 }
 
 void SplashScene::spriteFadeOut()

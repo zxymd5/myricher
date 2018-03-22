@@ -3,6 +3,7 @@
 
 #include "cocos2d.h"
 #include "ConstUtil.h"
+#include "MenuScene.h"
 
 USING_NS_CC;
 
