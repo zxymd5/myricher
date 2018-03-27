@@ -34,6 +34,7 @@ void MenuScene::menuTouchDown(Object *pSender, Control::EventType event)
 	case Btn_Single_Game_TAG:
 	{
 		log("single game");
+		Director::getInstance()->pushScene(MapChooseScene::createScene());
 		break;
 	}
 	case Btn_Multi_Game_TAG:
