@@ -37,4 +37,8 @@
 #define MAP_2 "map/map_2.png"
 #define MAP_3 "map/map_3.png"
 
+#define RIGHT_BANNER "map/right_banner.png"
+#define PLAYER_1 "map/player1.png"
+#define PLAYER_2 "map/player2.png"
+
 #endif
