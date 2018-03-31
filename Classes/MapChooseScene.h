@@ -24,12 +24,12 @@ public:
 private:
 	Size visibleSize;
 	Layer *_spritesContainer;
-	void back(Object *);
+	void back(Ref *);
 	int currentPage;
 	Point beginTouchPoint;
 	ScrollView *scrollView;
 
-	void singleTouchDown(Object *pSender, Control::EventType event);
+	void singleTouchDown(Ref *pSender, Control::EventType event);
 	void addBackgroundSprite();
 	void addScrollView();
 	void scrollViewDidScroll(ScrollView *view);

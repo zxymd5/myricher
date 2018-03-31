@@ -1,5 +1,7 @@
 #include "MenuScene.h"
 
+using namespace cocos2d::ui;
+
 Scene *MenuScene::createScene()
 {
 	auto scene = Scene::create();
@@ -23,7 +25,7 @@ bool MenuScene::init()
 }
 
 //Menu点击回调方法
-void MenuScene::menuTouchDown(Object *pSender, Control::EventType event)
+void MenuScene::menuTouchDown(Ref *pSender, Control::EventType event)
 {
 	log("single touched");
 	ControlButton *button = (ControlButton *)pSender;
@@ -95,10 +97,10 @@ void MenuScene::addBackgroundSprite()
 //添加Menu方法
 void MenuScene::addMenuSprites()
 {
-	Scale9Sprite *btnNormal = Scale9Sprite::create(NORMAL_MENU);
-	Scale9Sprite *btnPress = Scale9Sprite::create(PRESS_MENU);
+	cocos2d::ui::Scale9Sprite *btnNormal = cocos2d::ui::Scale9Sprite::create(NORMAL_MENU);
+	cocos2d::ui::Scale9Sprite *btnPress = cocos2d::ui::Scale9Sprite::create(PRESS_MENU);
 
-	LabelTTF *singleGameTTF = LabelTTF::create(SINGLE_GAME, FONT_MENU, Btn_FontSize);
+	Label *singleGameTTF = Label::createWithTTF(SINGLE_GAME, FONT_MENU, Btn_FontSize);
 	ControlButton *singleGameBtn = ControlButton::create(singleGameTTF, btnNormal);
 
 	//singleGameBtn->setBackgroundSpriteForState(btnPress, Control::State::HIGH_LIGHTED);
@@ -108,9 +110,9 @@ void MenuScene::addMenuSprites()
 	singleGameBtn->setTag(Btn_Single_Game_TAG);
 	addChild(singleGameBtn);
 
-	Scale9Sprite *btnNormal2 = Scale9Sprite::create(NORMAL_MENU);
-	Scale9Sprite *btnPress2 = Scale9Sprite::create(PRESS_MENU);
-	LabelTTF *multiGameTTF = LabelTTF::create(MULTI_GAME, FONT_MENU, Btn_FontSize);
+	cocos2d::ui::Scale9Sprite *btnNormal2 = cocos2d::ui::Scale9Sprite::create(NORMAL_MENU);
+	cocos2d::ui::Scale9Sprite *btnPress2 = cocos2d::ui::Scale9Sprite::create(PRESS_MENU);
+	Label *multiGameTTF = Label::createWithTTF(MULTI_GAME, FONT_MENU, Btn_FontSize);
 	ControlButton *multiGameBtn = ControlButton::create(multiGameTTF, btnNormal2);
 	multiGameBtn->setBackgroundSpriteForState(btnPress2, Control::State::HIGH_LIGHTED);
 
@@ -120,18 +122,18 @@ void MenuScene::addMenuSprites()
 	multiGameBtn->setTag(Btn_Multi_Game_TAG);
 	addChild(multiGameBtn);
 
-	Scale9Sprite *btnNormal3 = Scale9Sprite::create(NORMAL_MENU);
-	Scale9Sprite *btnPress3 = Scale9Sprite::create(PRESS_MENU);
+	cocos2d::ui::Scale9Sprite *btnNormal3 = cocos2d::ui::Scale9Sprite::create(NORMAL_MENU);
+	cocos2d::ui::Scale9Sprite *btnPress3 = cocos2d::ui::Scale9Sprite::create(PRESS_MENU);
 
 	bool music_on = UserDefault::getInstance()->getBoolForKey(MUSIC_ON_KEY, true);
-	LabelTTF *settingsGameTTF;
+	Label *settingsGameTTF;
 	if (music_on)
 	{
-		settingsGameTTF = LabelTTF::create(MUSIC_ON, FONT_MENU, Btn_FontSize);
+		settingsGameTTF = Label::createWithTTF(MUSIC_ON, FONT_MENU, Btn_FontSize);
 	}
 	else
 	{
-		settingsGameTTF = LabelTTF::create(MUSIC_OFF, FONT_MENU, Btn_FontSize);
+		settingsGameTTF = Label::createWithTTF(MUSIC_OFF, FONT_MENU, Btn_FontSize);
 	}
 
 	ControlButton *settingsGameBtn = ControlButton::create(settingsGameTTF, btnNormal3);
@@ -141,9 +143,9 @@ void MenuScene::addMenuSprites()
 	settingsGameBtn->setTag(Btn_Music_TAG);
 	addChild(settingsGameBtn);
 
-	Scale9Sprite *btnNormal4 = Scale9Sprite::create(NORMAL_MENU);
-	Scale9Sprite *btnPress4 = Scale9Sprite::create(PRESS_MENU);
-	LabelTTF *loadGameTTF = LabelTTF::create(LOAD_GAME, FONT_MENU, Btn_FontSize);
+	cocos2d::ui::Scale9Sprite *btnNormal4 = cocos2d::ui::Scale9Sprite::create(NORMAL_MENU);
+	cocos2d::ui::Scale9Sprite *btnPress4 = cocos2d::ui::Scale9Sprite::create(PRESS_MENU);
+	Label *loadGameTTF = Label::createWithTTF(LOAD_GAME, FONT_MENU, Btn_FontSize);
 	ControlButton *loadGameBtn = ControlButton::create(loadGameTTF, btnNormal4);
 
 	loadGameBtn->setPosition(Vec2(visibleSize.width / 2, visibleSize.height - 360));
@@ -152,9 +154,9 @@ void MenuScene::addMenuSprites()
 	loadGameBtn->setTag(Btn_Load_Game_TAG);
 	addChild(loadGameBtn);
 
-	Scale9Sprite *btnNormal5 = Scale9Sprite::create(NORMAL_MENU);
-	Scale9Sprite *btnPress5 = Scale9Sprite::create(PRESS_MENU);
-	LabelTTF *quitGameTTF = LabelTTF::create(QUIT_GAME, FONT_MENU, Btn_FontSize);
+	cocos2d::ui::Scale9Sprite *btnNormal5 = cocos2d::ui::Scale9Sprite::create(NORMAL_MENU);
+	cocos2d::ui::Scale9Sprite *btnPress5 = cocos2d::ui::Scale9Sprite::create(PRESS_MENU);
+	Label *quitGameTTF = Label::createWithTTF(QUIT_GAME, FONT_MENU, Btn_FontSize);
 	ControlButton *quitGameBtn = ControlButton::create(quitGameTTF, btnNormal5);
 
 	quitGameBtn->setPosition(Vec2(visibleSize.width / 2, visibleSize.height - 420));
@@ -167,7 +169,7 @@ void MenuScene::addMenuSprites()
 void MenuScene::popupQuitLayer()
 {
 	PopupLayer *popDialog = PopupLayer::create(DIALOG_BG);
-	popDialog->setContentSize(CCSizeMake(Quit_Dialog_Size_Width, Quit_Dialog_Size_Height));
+	popDialog->setContentSize(Size(Quit_Dialog_Size_Width, Quit_Dialog_Size_Height));
 	popDialog->setTitle(DIALOG_TITLE);
 	popDialog->setContentText(DIALOG_CONTENT, 20, 60, 250);
 	popDialog->setCallbackFunc(this, callfuncN_selector(MenuScene::quitButtonCallback));

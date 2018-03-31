@@ -1,4 +1,7 @@
 #include "GameBaseScene.h"
+#include "ui/CocosGUI.h"
+
+using namespace cocos2d::ui;
 
 cocos2d::Scene * GameBaseScene::createScene()
 {
@@ -52,36 +55,28 @@ void GameBaseScene::addPlayer()
 	player_1->setPosition(tableStartPosition_x + tableWidth / 2, tableStartPosition_y - tableHeight);
 	addChild(player_1);
 
-	LabelTTF *player_1_money = LabelTTF::create();
-	player_1_money->setString("$");
+	Label *player_1_money = Label::create("$", "fonts/Marker Felt.ttf", 25);
 	player_1_money->setAnchorPoint(Vec2(0, 0.5));
-	player_1_money->setFontSize(25);
-	player_1_money->setPosition(tableStartPosition_x + tableWidth, tableStartPosition_y - tableHeight / 2);
+	player_1_money->setPosition(Vec2(tableStartPosition_x + tableWidth, tableStartPosition_y - tableHeight / 2));
 	addChild(player_1_money);
 
-	LabelTTF *player_1_strength = LabelTTF::create();
-	player_1_strength->setString("+");
+	Label *player_1_strength = Label::create("+", "fonts/Marker Felt.ttf", 28);
 	player_1_strength->setAnchorPoint(Vec2(0, 0.5));
-	player_1_strength->setFontSize(28);
-	player_1_strength->setPosition(tableStartPosition_x + tableWidth, tableStartPosition_y - tableHeight / 2 * 3);
+	player_1_strength->setPosition(Vec2(tableStartPosition_x + tableWidth, tableStartPosition_y - tableHeight / 2 * 3));
 	addChild(player_1_strength);
-
+	
 	Sprite *player_2 = Sprite::create(PLAYER_2);
 	player_2->setPosition(tableStartPosition_x + tableWidth / 2, tableStartPosition_y - 3 * tableHeight);
 	addChild(player_2);
 
-	LabelTTF *player_2_money = LabelTTF::create();
-	player_2_money->setString("$");
+	Label *player_2_money = Label::create("$", "fonts/Marker Felt.ttf", 25);
 	player_2_money->setAnchorPoint(Vec2(0, 0.5));
-	player_2_money->setFontSize(25);
-	player_2_money->setPosition(tableStartPosition_x + tableWidth, tableStartPosition_y - tableHeight / 2 * 5);
+	player_2_money->setPosition(Vec2(tableStartPosition_x + tableWidth, tableStartPosition_y - tableHeight / 2 * 5));
 	addChild(player_2_money);
 
-	LabelTTF *player_2_strength = LabelTTF::create();
-	player_2_strength->setString("+");
+	Label *player_2_strength = Label::create("+", "fonts/Marker Felt.ttf", 28);
 	player_2_strength->setAnchorPoint(Vec2(0, 0.5));
-	player_2_strength->setFontSize(28);
-	player_2_strength->setPosition(tableStartPosition_x + tableWidth, tableStartPosition_y - tableHeight / 2 * 7);
+	player_2_strength->setPosition(Vec2(tableStartPosition_x + tableWidth, tableStartPosition_y - tableHeight / 2 * 7));
 	addChild(player_2_strength);
 }
 

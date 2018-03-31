@@ -11,7 +11,7 @@
 #define MENU_LOGO "menuLogo.png"
 #define RAINBOW "rainbow.png"
 
-#define FONT_MENU "Marker Felt"
+#define FONT_MENU "fonts/Marker Felt.ttf"
 
 #define SINGLE_GAME "single_game"
 #define MULTI_GAME "multi_game"
@@ -40,5 +40,32 @@
 #define RIGHT_BANNER "map/right_banner.png"
 #define PLAYER_1 "map/player1.png"
 #define PLAYER_2 "map/player2.png"
+
+#define PLAYER1_ANIM_PLIST "images/player1_anim.plist"
+#define PLAYER1_ANIM_PNG "images/player1_anim.png"
+
+#define PLAYER2_ANIM_PLIST "images/player2_anim.plist"
+#define PLAYER2_ANIM_PNG "images/player2_anim.png"
+
+#define PLAYER_1_NAME "player1"
+const int PLAYER_1_TAG = 1;
+#define PLAYER_2_NAME "player2"
+const int PLAYER_2_TAG = 2;
+
+#define RICHER_MSG "richer_msg"
+
+const int MSG_GO_HIDE_TAG = 0;
+const int MSG_GO_SHOW_TAG = 1;
+
+#define DIGITAL_0 "digital_0.png"
+#define DIGITAL_1 "digital_1.png"
+#define DIGITAL_2 "digital_2.png"
+#define DIGITAL_3 "digital_3.png"
+#define DIGITAL_4 "digital_4.png"
+#define DIGITAL_5 "digital_5.png"
+#define DIGITAL_6 "digital_6.png"
+#define DIGITAL_7 "digital_7.png"
+#define DIGITAL_8 "digital_8.png"
+#define DIGITAL_9 "digital_9.png"
 
 #endif

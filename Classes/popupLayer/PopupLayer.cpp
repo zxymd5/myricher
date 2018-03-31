@@ -1,4 +1,5 @@
 #include "PopupLayer.h"
+#include "ConstUtil.h"
 
 bool PopupLayer::init()
 {
@@ -44,19 +45,19 @@ PopupLayer * PopupLayer::create(const char *backgroundImage)
 
 void PopupLayer::setTitle(const char *title, int fontSize /*= Pop_FontSize*/)
 {
-	LabelTTF *ltfTitle = LabelTTF::create(title, "", fontSize);
+	Label *ltfTitle = Label::createWithTTF(title, "fonts/Marker Felt.ttf", fontSize);
 	setLabelTitle(ltfTitle);
 }
 
 void PopupLayer::setContentText(const char *text, int fontSize /*= Pop_FontSize*/, int padding /*= 50*/, int paddingTop /*= 100*/)
 {
-	LabelTTF *ltf = LabelTTF::create(text, "", fontSize);
+	Label *ltf = Label::createWithTTF(text, "fonts/Marker Felt.ttf", fontSize);
 	setLabelContentText(ltf);
 	m_contentPadding = padding;
 	m_contentPaddingTop = paddingTop;
 }
 
-void PopupLayer::setCallbackFunc(Object *target, SEL_CallFuncN callfun)
+void PopupLayer::setCallbackFunc(Ref *target, SEL_CallFuncN callfun)
 {
 	m_callbackListener = target;
 	m_callback = callfun;
@@ -67,13 +68,13 @@ bool PopupLayer::addButton(const char *normalImage, const char *selectImage, con
 	Size winSize = Director::getInstance()->getWinSize();
 	Point pCenter = Vec2(winSize.width / 2, winSize.height / 2);
 	
-	MenuItemImage *menuImage = MenuItemImage::create(normalImage, selectImage, this, menu_selector(PopupLayer::buttonCallback));
+	MenuItemImage *menuImage = MenuItemImage::create(normalImage, selectImage, CC_CALLBACK_1(PopupLayer::buttonCallback, this));
 	menuImage->setTag(tag);
 	menuImage->setPosition(pCenter);
 	
 	Size imenu = menuImage->getContentSize();
-	LabelTTF *ttf = LabelTTF::create(title, "", 20);
-	ttf->setColor(ccc3(0, 0, 0));
+	Label *ttf = Label::createWithTTF(title, FONT_MENU, 20);
+	ttf->setColor(Color3B(0, 0, 0));
 	ttf->setPosition(Vec2(imenu.width / 2, imenu.height / 2));
 	menuImage->addChild(ttf);
 
@@ -108,8 +109,8 @@ void PopupLayer::onEnter()
 
 	if (getLabelTitle())
 	{
-		getLabelTitle()->setPosition(ccpAdd(pCenter, ccp(0, contentSize.height / 2 - 20)));
-		getLabelTitle()->setColor(ccc3(0, 0, 0));
+		getLabelTitle()->setPosition(pCenter + Vec2(0, contentSize.height / 2 - 20));
+		getLabelTitle()->setColor(Color3B(0, 0, 0));
 		this->addChild(getLabelTitle());
 	}
 
@@ -119,11 +120,11 @@ void PopupLayer::onEnter()
 	{
 		if (getLabelContentText())
 		{
-			LabelTTF *ltf = getLabelContentText();
-			ltf->setPosition(ccp(winSize.width / 2, winSize.height / 2));
-			ltf->setDimensions(CCSizeMake(contentSize.width - m_contentPadding * 2, contentSize.height - m_contentPaddingTop));
-			ltf->setHorizontalAlignment(kCCTextAlignmentLeft);
-			ltf->setColor(ccc3(0, 0, 0));
+			Label *ltf = getLabelContentText();
+			ltf->setPosition(Vec2(winSize.width / 2, winSize.height / 2));
+			ltf->setDimensions(contentSize.width - m_contentPadding * 2, contentSize.height - m_contentPaddingTop);
+			ltf->setHorizontalAlignment(TextHAlignment::LEFT);
+			ltf->setColor(Color3B(0, 0, 0));
 			this->addChild(ltf);
 		}
 	}
@@ -148,7 +149,7 @@ void PopupLayer::onExit()
 	CC_SAFE_RELEASE(m__s9BackGround);
 }
 
-void PopupLayer::buttonCallback(CCObject *pSender)
+void PopupLayer::buttonCallback(Ref *pSender)
 {
 	Node *node = dynamic_cast<Node *>(pSender);
 	log("touch tag: %d", node->getTag());

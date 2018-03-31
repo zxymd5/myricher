@@ -16,6 +16,10 @@ bool MapChooseScene::init()
 	{
 		return false;
 	}
+
+	//setTouchEnabled(true);
+	//setTouchMode(Touch::DispatchMode::ONE_BY_ONE);
+
 	visibleSize = Director::getInstance()->getVisibleSize();
 
 	currentPage = 1;
@@ -34,19 +38,19 @@ bool MapChooseScene::init()
 	Menu *menu = Menu::create();
 	addChild(menu);
 
-	MenuItem *backItem = MenuItemImage::create("images/back_normal.png", "images/back_pressed.png", this, menu_selector(MapChooseScene::back));
+	MenuItem *backItem = MenuItemImage::create("images/back_normal.png", "images/back_pressed.png", CC_CALLBACK_1(MapChooseScene::back, this));
 	menu->addChild(backItem);
 	backItem->setPosition(Vec2(visibleSize.width / 2 - backItem->getContentSize().width / 2,
 						backItem->getContentSize().height / 2 - visibleSize.height / 2));
 	return true;
 }
 
-void MapChooseScene::back(Object *)
+void MapChooseScene::back(Ref *)
 {
 	Director::getInstance()->popScene();
 }
 
-void MapChooseScene::singleTouchDown(Object *pSender, Control::EventType event)
+void MapChooseScene::singleTouchDown(Ref *pSender, Control::EventType event)
 {
 
 }
@@ -69,13 +73,13 @@ void MapChooseScene::addScrollView()
 	Sprite *map3Sprite = Sprite::create(MAP_3);
 
 	_spritesContainer->addChild(map1Sprite);
-	map1Sprite->setPosition(ccpAdd(center, Vec2(0, 0)));
+	map1Sprite->setPosition(center + Vec2(0, 0));
 
 	_spritesContainer->addChild(map2Sprite);
-	map2Sprite->setPosition(ccpAdd(center, Vec2(visibleSize.width, 0)));
+	map2Sprite->setPosition(center + Vec2(visibleSize.width, 0));
 
 	_spritesContainer->addChild(map3Sprite);
-	map3Sprite->setPosition(ccpAdd(center, Vec2(2 * visibleSize.width, 0)));
+	map3Sprite->setPosition(center + Vec2(2 * visibleSize.width, 0));
 
 	_spritesContainer->setPosition(Point::ZERO);
 	_spritesContainer->setContentSize(Size(visibleSize.width * MAP_COUNT, visibleSize.height));
