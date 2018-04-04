@@ -8,7 +8,7 @@ USING_NS_CC;
 class Util
 {
 public:
-	static Vector<String *> splitString(const char *srcStr, const char *sSep);
+	static Vector<__String *> splitString(const char *srcStr, const char *sSep);
 };
 
 #endif

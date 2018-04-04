@@ -14,9 +14,29 @@ void Map2Scene::addMap()
 	addChild(_map);
 }
 
+void Map2Scene::initTiledGrid()
+{
+	tiledColsCount = 21;
+	tiledRowsCount = 15;
+	canPassGrid = new bool *[tiledRowsCount];
+	for (int i = 0; i < tiledRowsCount; i++)
+	{
+		canPassGrid[i] = new bool[tiledColsCount];
+	}
+
+	for (int row = 0; row < tiledRowsCount; row++)
+	{
+		for (int col = 0; col < tiledColsCount; col++)
+		{
+			canPassGrid[row][col] = false;
+		}
+	}
+}
+
 bool Map2Scene::init()
 {
 	addMap();
+	initTiledGrid();
 	if (!GameBaseScene::init())
 	{
 		return false;

@@ -1,8 +1,10 @@
 #include "RicherPlayer.h"
+#include "GameBaseScene.h"
+#include "RicherGameController.h"
 
 RicherPlayer::RicherPlayer()
 {
-	_comeFromeRow = -1;
+	_comeFromRow = -1;
 	_comeFromCol = -1;
 }
 
@@ -50,7 +52,8 @@ bool RicherPlayer::init(char *name, int tag, int money, int strength)
 
 void RicherPlayer::startGo(std::vector<int> rowVector, std::vector<int> colVector)
 {
-
+	RicherGameController *instance = RicherGameController::getInstance();
+	instance->startRealGo(rowVector, colVector, this);
 }
 
 void RicherPlayer::addPlayerAnimation()

@@ -11,6 +11,7 @@ class Map3Scene : public GameBaseScene
 public:
 	static Scene *createScene();
 	void addMap();
+	void initTiledGrid();
 	virtual bool init();
 	CREATE_FUNC(Map3Scene);
 };

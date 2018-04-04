@@ -38,7 +38,7 @@ private:
 	CC_SYNTHESIZE(int, _money, Money);
 	CC_SYNTHESIZE(int, _strength, Strength);
 
-	CC_SYNTHESIZE(int, _comeFromeRow, ComeFromeRow);
+	CC_SYNTHESIZE(int, _comeFromRow, ComeFromRow);
 	CC_SYNTHESIZE(int, _comeFromCol, ComeFromCol);
 	CC_SYNTHESIZE(bool, _isMyTurn, IsMyTurn);
 };

@@ -42,6 +42,10 @@ bool MapChooseScene::init()
 	menu->addChild(backItem);
 	backItem->setPosition(Vec2(visibleSize.width / 2 - backItem->getContentSize().width / 2,
 						backItem->getContentSize().height / 2 - visibleSize.height / 2));
+
+	//auto scene = TransitionFadeBL::create(1.5, Map1Scene::createScene());
+	//Director::getInstance()->pushScene(scene);
+
 	return true;
 }
 
