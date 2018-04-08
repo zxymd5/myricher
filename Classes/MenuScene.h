@@ -31,7 +31,7 @@ public:
 
 private:
 	Size visibleSize;
-	void menuTouchDown(Object *pSender, Control::EventType event);
+	void menuTouchDown(Ref *pSender, Control::EventType event);
 	void addBackgroundSprite();
 	void addMenuSprites();
 	void popupQuitLayer();

@@ -11,7 +11,7 @@
 #define MENU_LOGO "menuLogo.png"
 #define RAINBOW "rainbow.png"
 
-#define FONT_MENU "Marker Felt"
+#define FONT_MENU "fonts/Marker Felt.ttf"
 
 #define SINGLE_GAME "single_game"
 #define MULTI_GAME "multi_game"

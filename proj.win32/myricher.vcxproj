@@ -112,6 +112,12 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
       <Outputs>$(TargetName).cab</Outputs>
       <Inputs>$(TargetFileName)</Inputs>
     </CustomBuildStep>
+    <PreBuildEvent>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy $(COCOS2D_X_ROOT)\prebuild\win32\$(Configuration) $(OutDir)</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">拷贝库到指定目录</Message>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -149,12 +155,16 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
+    <ClCompile Include="..\Classes\MenuScene.cpp" />
+    <ClCompile Include="..\Classes\popupLayer\PopupLayer.cpp" />
     <ClCompile Include="..\Classes\SplashScene.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\ConstUtil.h" />
+    <ClInclude Include="..\Classes\MenuScene.h" />
+    <ClInclude Include="..\Classes\popupLayer\PopupLayer.h" />
     <ClInclude Include="..\Classes\SplashScene.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>

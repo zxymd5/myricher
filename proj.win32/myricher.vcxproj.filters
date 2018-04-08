@@ -21,6 +21,12 @@
     <ClCompile Include="..\Classes\SplashScene.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\popupLayer\PopupLayer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\MenuScene.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -33,6 +39,12 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\SplashScene.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\popupLayer\PopupLayer.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\MenuScene.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
