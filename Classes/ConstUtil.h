@@ -32,4 +32,12 @@
 #define OK "yes"
 #define CANCEL "no"
 
+#define STAGE_BACKGROUND "map/stage_background2.png"
+#define MAP_1 "map/map_1.png"
+#define MAP_2 "map/map_2.png"
+#define MAP_3 "map/map_3.png"
+
+#define BACK_NORMAL "images/back_normal.png"
+#define BACK_PRESSED "images/back_pressed.png"
+
 #endif

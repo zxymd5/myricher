@@ -5,6 +5,7 @@
 #include "cocos-ext.h"
 #include "ConstUtil.h"
 #include "popupLayer/PopupLayer.h"
+#include "MapChooseScene.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;

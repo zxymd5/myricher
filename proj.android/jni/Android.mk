@@ -15,6 +15,7 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../Classes/AppDelegate.cpp \
                    ../../Classes/SplashScene.cpp \
 				   ../../Classes/MenuScene.cpp \
+				   ../../Classes/MapChooseScene.cpp \
 				   ../../Classes/popupLayer/PopupLayer.cpp \
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes
