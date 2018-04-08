@@ -30,8 +30,7 @@ bool MapChooseScene::init()
 	Menu *menu = Menu::create();
 	addChild(menu);
 
-	MenuItem *backItem = MenuItemImage::create(BACK_NORMAL, BACK_PRESSED, this, 
-						menu_selector(MapChooseScene::back));
+	MenuItem *backItem = MenuItemImage::create(BACK_NORMAL, BACK_PRESSED, CC_CALLBACK_1(MapChooseScene::back, this));
 	menu->addChild(backItem);
 
 	backItem->setPosition(Vec2(visibleSize.width / 2 - backItem->getContentSize().width / 2, 
@@ -69,7 +68,7 @@ void MapChooseScene::addScrollView()
 	scrollView = ScrollView::create();
 	scrollView->setContainer(_spriteContainer);
 	scrollView->setDirection(ScrollView::Direction::HORIZONTAL);
-	scrollView->setTouchEnabled(true);
+	scrollView->setTouchEnabled(false);
 	scrollView->setPosition(Point::ZERO);
 
 	scrollView->setViewSize(visibleSize);
@@ -94,6 +93,7 @@ void MapChooseScene::onTouchMoved(Touch * touch, Event * unused_event)
 
 void MapChooseScene::onTouchEnded(Touch * touch, Event * unused_event)
 {
+	log("Touch ended");
 	Point endPoint = Director::getInstance()->convertToGL(touch->getLocationInView());
 	float distance = endPoint.x - beginTouchPoint.x;
 	if (fabs(distance) > TOUCH_DISTANCE)
@@ -149,15 +149,7 @@ void MapChooseScene::addBackgroundSprite()
 	addChild(stage_bg);
 }
 
-void MapChooseScene::singleTouchDown(Ref *pSender, Control::EventType event)
-{
-
-}
-
 void MapChooseScene::scrollViewDidZoom(ScrollView * view)
 {
 }
 
-void MapChooseScene::scrollViewMoveOver(ScrollView * view)
-{
-}

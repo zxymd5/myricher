@@ -25,13 +25,12 @@ private:
 	Point beginTouchPoint;
 	ScrollView *scrollView;
 
-	void singleTouchDown(Ref *pSender, Control::EventType event);
 	void addBackgroundSprite();
 	void addScrollView();
 
 	void scrollViewDidScroll(ScrollView *view);
 	void scrollViewDidZoom(ScrollView *view);
-	void scrollViewMoveOver(ScrollView *view);
+	
 	void adjustScrollView(float distance);
 	void onTouchEnded(Touch*touch, Event *unused_event);
 	bool onTouchBegan(Touch * touch, Event *unused_event);
