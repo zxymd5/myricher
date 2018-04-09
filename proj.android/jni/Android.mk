@@ -16,6 +16,10 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../Classes/SplashScene.cpp \
 				   ../../Classes/MenuScene.cpp \
 				   ../../Classes/MapChooseScene.cpp \
+				   ../../Classes/GameBaseScene.cpp \
+				   ../../Classes/Map1Scene.cpp \
+				   ../../Classes/Map2Scene.cpp \
+				   ../../Classes/Map3Scene.cpp \
 				   ../../Classes/popupLayer/PopupLayer.cpp \
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes

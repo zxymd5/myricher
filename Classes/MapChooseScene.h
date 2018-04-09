@@ -3,6 +3,9 @@
 #include "cocos2d.h"
 #include "cocos-ext.h"
 #include "ConstUtil.h"
+#include "Map1Scene.h"
+#include "Map2Scene.h"
+#include "Map3Scene.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;

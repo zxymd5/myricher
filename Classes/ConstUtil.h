@@ -40,4 +40,8 @@
 #define BACK_NORMAL "images/back_normal.png"
 #define BACK_PRESSED "images/back_pressed.png"
 
+#define RIGHT_BANNER "map/right_banner.png"
+#define PLAYER_1 "map/player1.png"
+#define PLAYER_2 "map/player2.png"
+
 #endif

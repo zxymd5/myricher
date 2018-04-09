@@ -103,12 +103,18 @@ void MapChooseScene::onTouchEnded(Touch * touch, Event * unused_event)
 	else {
 		if (currentPage == 1)
 		{
+			auto scene = TransitionFadeBL::create(1.5, Map1Scene::createScene());
+			Director::getInstance()->pushScene(scene);
 		}
 		if (currentPage == 2)
 		{
+			auto scene = TransitionFadeBL::create(1.5, Map2Scene::createScene());
+			Director::getInstance()->pushScene(scene);
 		}
 		if (currentPage == 3)
 		{
+			auto scene = TransitionFadeBL::create(1.5, Map3Scene::createScene());
+			Director::getInstance()->pushScene(scene);
 		}
 	}
 }
