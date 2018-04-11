@@ -17,9 +17,30 @@ void Map1Scene::addMap()
 bool Map1Scene::init()
 {
 	addMap();
+	initTiledGrid();
 	if (!GameBaseScene::init())
 	{
 		return false;
 	}
 	return true;
+}
+
+void Map1Scene::initTiledGrid()
+{
+	tiledColsCount = 21;
+	tiledRowsCount = 16;
+	canPassGrid = new bool *[tiledRowsCount];
+	for (int i = 0; i < tiledRowsCount; i++)
+	{
+		canPassGrid[i] = new bool[tiledColsCount];
+	}
+
+	for (int row = 0; row < tiledRowsCount; row++)
+	{
+		for (int col = 0; col < tiledColsCount; col++)
+		{
+			canPassGrid[row][col] = false;
+		}
+	}
+	log("");
 }

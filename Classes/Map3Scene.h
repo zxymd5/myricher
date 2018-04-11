@@ -12,6 +12,7 @@ public:
 	static Scene *createScene();
 	void addMap();
 	virtual bool init();
+	void initTiledGrid();
 	CREATE_FUNC(Map3Scene);
 };
 

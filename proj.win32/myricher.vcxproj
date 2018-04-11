@@ -155,17 +155,35 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
+    <ClCompile Include="..\Classes\GameBaseScene.cpp" />
+    <ClCompile Include="..\Classes\Map1Scene.cpp" />
+    <ClCompile Include="..\Classes\Map2Scene.cpp" />
+    <ClCompile Include="..\Classes\Map3Scene.cpp" />
+    <ClCompile Include="..\Classes\MapChooseScene.cpp" />
     <ClCompile Include="..\Classes\MenuScene.cpp" />
     <ClCompile Include="..\Classes\popupLayer\PopupLayer.cpp" />
+    <ClCompile Include="..\Classes\RicherGameController.cpp" />
+    <ClCompile Include="..\Classes\RicherPlayer.cpp" />
+    <ClCompile Include="..\Classes\RouteNavigation.cpp" />
     <ClCompile Include="..\Classes\SplashScene.cpp" />
+    <ClCompile Include="..\Classes\Util.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\ConstUtil.h" />
+    <ClInclude Include="..\Classes\GameBaseScene.h" />
+    <ClInclude Include="..\Classes\Map1Scene.h" />
+    <ClInclude Include="..\Classes\Map2Scene.h" />
+    <ClInclude Include="..\Classes\Map3Scene.h" />
+    <ClInclude Include="..\Classes\MapChooseScene.h" />
     <ClInclude Include="..\Classes\MenuScene.h" />
     <ClInclude Include="..\Classes\popupLayer\PopupLayer.h" />
+    <ClInclude Include="..\Classes\RicherGameController.h" />
+    <ClInclude Include="..\Classes\RicherPlayer.h" />
+    <ClInclude Include="..\Classes\RouteNavigation.h" />
     <ClInclude Include="..\Classes\SplashScene.h" />
+    <ClInclude Include="..\Classes\Util.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>
   <ItemGroup>
