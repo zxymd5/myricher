@@ -41,6 +41,8 @@ public:
 	void onExit();
 	void addGoButton();
 	void menuButtonCallback(Ref *pSender);
+	void onReceiveCustomEvent(EventCustom *event);
+	EventListenerCustom *customListener;
 
 	RicherPlayer *player1;
 	RicherPlayer *player2;

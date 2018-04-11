@@ -113,5 +113,9 @@ void RicherGameController::pickOnePlayerToGo()
 		RicherPlayer *richerPlayer = dynamic_cast<RicherPlayer *>(*it);
 		richerPlayer->setIsMyTurn(true);
 	}
-	NotificationCenter::getInstance()->postNotification(RICHER_MSG, String::createWithFormat("%d", MSG_GO_SHOW_TAG));
+	//NotificationCenter::getInstance()->postNotification(RICHER_MSG, String::createWithFormat("%d", MSG_GO_SHOW_TAG));
+	auto dispatcher = Director::getInstance()->getEventDispatcher();
+	EventCustom _event = EventCustom(RICHER_MSG);
+	_event.setUserData(__String::createWithFormat("%d", MSG_GO_SHOW_TAG));
+	dispatcher->dispatchEvent(&_event);
 }

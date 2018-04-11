@@ -174,7 +174,11 @@ void GameBaseScene::menuButtonCallback(Ref * pSender)
 		{
 			log(" rowVector row is %d -- colVector col is %d", rowVector[i], colVector[i]);
 		}
-		NotificationCenter::getInstance()->postNotification(RICHER_MSG, __String::createWithFormat("%d", MSG_GO_HIDE_TAG));
+		//NotificationCenter::getInstance()->postNotification(RICHER_MSG, __String::createWithFormat("%d", MSG_GO_HIDE_TAG));
+		auto dispatcher = Director::getInstance()->getEventDispatcher();
+		EventCustom _event = EventCustom(RICHER_MSG);
+		_event.setUserData(__String::createWithFormat("%d", MSG_GO_HIDE_TAG));
+		dispatcher->dispatchEvent(&_event);
 		player1->startGo(rowVector, colVector);
 		log("go button clicked over");
 	}
@@ -182,17 +186,44 @@ void GameBaseScene::menuButtonCallback(Ref * pSender)
 
 void GameBaseScene::onExit()
 {
+	Director::getInstance()->getEventDispatcher()->removeEventListener(customListener);
 	CC_SAFE_DELETE(canPassGrid);
 	Layer::onExit();
 }
 
 void GameBaseScene::addNotificationObserver()
 {
-	NotificationCenter::getInstance()->addObserver(
-		this, 
-		CC_CALLFUNCO_SELECTOR(GameBaseScene::receivedNotificationMsg),
-		RICHER_MSG,
-		NULL);
+	//NotificationCenter::getInstance()->addObserver(
+	//	this, 
+	//	CC_CALLFUNCO_SELECTOR(GameBaseScene::receivedNotificationMsg),
+	//	RICHER_MSG,
+	//	NULL);
+	auto dispatcher = Director::getInstance()->getEventDispatcher();
+	customListener = EventListenerCustom::create(RICHER_MSG, CC_CALLBACK_1(GameBaseScene::onReceiveCustomEvent, this));
+	dispatcher->addEventListenerWithFixedPriority(customListener, 1);
+}
+
+void GameBaseScene::onReceiveCustomEvent(EventCustom * event)
+{
+	__String *srcDate = (__String*)event->getUserData();
+	Vector<__String *> messageVector = Util::splitString(srcDate->getCString(), "-");
+	int retMsgType = messageVector.at(0)->intValue();
+	log("received go message is: %d", retMsgType);
+	switch (retMsgType)
+	{
+	case MSG_GO_SHOW_TAG: {
+		goMenuItemButton->runAction(MoveBy::create(0.3, Vec2(-(goMenuItemButton->getContentSize().width) * 2, 0)));
+		gameRoundCount++;
+		refreshRoundDisplay();
+		break;
+	}
+	case MSG_GO_HIDE_TAG: {
+		goMenuItemButton->runAction(MoveBy::create(0.3, Vec2((goMenuItemButton->getContentSize().width) * 2, 0)));
+		break;
+	}
+	default:
+		break;
+	}
 }
 
 void GameBaseScene::receivedNotificationMsg(Ref * data)
