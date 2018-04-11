@@ -42,5 +42,4 @@ void Map3Scene::initTiledGrid()
 			canPassGrid[row][col] = false;
 		}
 	}
-	log("");
 }

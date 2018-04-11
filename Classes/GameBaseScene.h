@@ -46,6 +46,8 @@ public:
 	RicherPlayer *player2;
 
 	static Vector<RicherPlayer*> players_vector;
+	static Vector<Sprite *> pathMarkVector;
+	static void drawPathColor(std::vector<int> rowVector, std::vector<int> colVector);
 
 private:
 	void drawTable(int playerNumber);
@@ -58,6 +60,7 @@ private:
 	Vector<SpriteFrame *>digiteRoundVector;
 	Vector<Sprite*> refreshRoundVector;
 	void refreshRoundDisplay();
+	void addPathMark();
 };
 
 #endif

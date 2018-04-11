@@ -145,6 +145,14 @@ void RicherPlayer::setPlayerAnimate()
 
 void RicherPlayer::startGo(std::vector<int> rowVector, std::vector<int> colVector)
 {
-	RicherGameController *instance = RicherGameController::getInstance();
-	instance->startRealGo(rowVector, colVector, this);
+	FadeOut *fadeOut = FadeOut::create(0.2);
+	FadeIn *fadeIn = FadeIn::create(0.2);
+	GameBaseScene::drawPathColor(rowVector, colVector);
+	this->setIsMyTurn(false);
+	this->runAction(Sequence::create(fadeOut, fadeIn, CallFunc::create(
+		[rowVector, colVector, this]() {
+		RicherGameController *instance = RicherGameController::getInstance();
+		instance->startRealGo(rowVector, colVector, this);
+	}
+	), NULL));
 }

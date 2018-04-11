@@ -73,4 +73,11 @@ const int MSG_GO_SHOW_TAG = 1;
 #define DIGITAL_8 "digital_8.png"
 #define DIGITAL_9 "digital_9.png"
 
+#define PATH_MARK_1 "images/mark1.png"
+#define PATH_MARK_2 "images/mark2.png"
+#define PATH_MARK_3 "images/mark3.png"
+#define PATH_MARK_4 "images/mark4.png"
+#define PATH_MARK_5 "images/mark5.png"
+#define PATH_MARK_6 "images/mark6.png"
+
 #endif

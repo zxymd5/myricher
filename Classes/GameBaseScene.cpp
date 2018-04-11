@@ -5,6 +5,7 @@ int GameBaseScene::tiledRowsCount;
 bool **GameBaseScene::canPassGrid;
 TMXLayer *GameBaseScene::wayLayer;
 Vector<RicherPlayer *> GameBaseScene::players_vector;
+Vector<Sprite *> GameBaseScene::pathMarkVector;
 
 Scene *GameBaseScene::createScene()
 {
@@ -23,6 +24,7 @@ bool GameBaseScene::init()
 	addRightBanner();
 	drawTable(2);
 	setWayPassToGrid();
+	addPathMark();
 	addPlayer();
 	addGoButton();
 	addNotificationObserver();
@@ -267,5 +269,54 @@ void GameBaseScene::refreshRoundDisplay()
 		Sprite *sp = refreshRoundVector.at(i);
 		sp->setPosition(Vec2((tableStartPosition_x + 50) + (i * 25), 50));
 		sp->setVisible(true);
+	}
+}
+
+void GameBaseScene::addPathMark()
+{
+	Sprite *mark1 = Sprite::create(PATH_MARK_1);
+	Sprite *mark2 = Sprite::create(PATH_MARK_2);
+	Sprite *mark3 = Sprite::create(PATH_MARK_3);
+	Sprite *mark4 = Sprite::create(PATH_MARK_4);
+	Sprite *mark5 = Sprite::create(PATH_MARK_5);
+	Sprite *mark6 = Sprite::create(PATH_MARK_6);
+
+	mark1->setAnchorPoint(Point::ZERO);
+	mark2->setAnchorPoint(Point::ZERO);
+	mark3->setAnchorPoint(Point::ZERO);
+	mark4->setAnchorPoint(Point::ZERO);
+	mark5->setAnchorPoint(Point::ZERO);
+	mark6->setAnchorPoint(Point::ZERO);
+
+	mark1->setVisible(false);
+	mark2->setVisible(false);
+	mark3->setVisible(false);
+	mark4->setVisible(false);
+	mark5->setVisible(false);
+	mark6->setVisible(false);
+
+	addChild(mark1);
+	addChild(mark2);
+	addChild(mark3);
+	addChild(mark4);
+	addChild(mark5);
+	addChild(mark6);
+
+	pathMarkVector.pushBack(mark1);
+	pathMarkVector.pushBack(mark2);
+	pathMarkVector.pushBack(mark3);
+	pathMarkVector.pushBack(mark4);
+	pathMarkVector.pushBack(mark5);
+	pathMarkVector.pushBack(mark6);
+}
+
+void GameBaseScene::drawPathColor(std::vector<int> rowVector, std::vector<int> colVector)
+{
+	int stepsCount = rowVector.size() - 1;
+
+	for (int i = 1; i < rowVector.size(); i++)
+	{
+		pathMarkVector.at(i - 1)->setPosition(Vec2(colVector[i] * 32, rowVector[i] * 32));
+		pathMarkVector.at(i - 1)->setVisible(true);
 	}
 }

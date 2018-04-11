@@ -80,6 +80,7 @@ void RicherGameController::startRealGo(std::vector<int> rowVector, std::vector<i
 
 void RicherGameController::endGo()
 {
+	GameBaseScene::pathMarkVector.at(stepHasGone)->setVisible(false);
 	stepHasGone++;
 	if (stepHasGone >= stepsCount)
 	{
