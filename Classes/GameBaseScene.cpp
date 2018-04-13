@@ -6,6 +6,24 @@ bool **GameBaseScene::canPassGrid;
 TMXLayer *GameBaseScene::wayLayer;
 Vector<RicherPlayer *> GameBaseScene::players_vector;
 Vector<Sprite *> GameBaseScene::pathMarkVector;
+TMXTiledMap *GameBaseScene::_map;
+TMXLayer *GameBaseScene::landLayer;
+int GameBaseScene::blank_land_tiledID;
+int GameBaseScene::strength_30_tiledID;
+int GameBaseScene::strength_50_tiledID;
+int GameBaseScene::strength_80_tiledID;
+
+int GameBaseScene::randomEvent_tiledID;
+int GameBaseScene::lottery_tiledID;
+int GameBaseScene::stock_tiledID;
+
+int GameBaseScene::player1_building_1_tiledID;
+int GameBaseScene::player1_building_2_tiledID;
+int GameBaseScene::player1_building_3_tiledID;
+
+int GameBaseScene::player2_building_1_tiledID;
+int GameBaseScene::player2_building_2_tiledID;
+int GameBaseScene::player2_building_3_tiledID;
 
 Scene *GameBaseScene::createScene()
 {
@@ -30,6 +48,8 @@ bool GameBaseScene::init()
 	addNotificationObserver();
 	addDigiteRoundSprite();
 	refreshRoundDisplay();
+	initLandLayerFromMap();
+	initPopDialog();
 	return true;
 }
 
@@ -221,36 +241,62 @@ void GameBaseScene::onReceiveCustomEvent(EventCustom * event)
 		goMenuItemButton->runAction(MoveBy::create(0.3, Vec2((goMenuItemButton->getContentSize().width) * 2, 0)));
 		break;
 	}
-	default:
-		break;
-	}
-}
-
-void GameBaseScene::receivedNotificationMsg(Ref * data)
-{
-	__String *srcDate = (__String*)data;
-	Vector<__String *>messageVector = Util::splitString(srcDate->getCString(), "-");
-	int retMsgType = messageVector.at(0)->intValue();
-	log("received go message is : %d", retMsgType);
-
-	switch (retMsgType)
+	case MSG_BUY_BLANK_TAG:
 	{
-	case MSG_GO_SHOW_TAG:
+		buy_land_x = messageVector.at(1)->intValue();
+		buy_land_y = messageVector.at(2)->intValue();
+		int playerTag = messageVector.at(3)->intValue();
+		switch (playerTag)
 		{
-			goMenuItemButton->runAction(MoveBy::create(0.3, Vec2(-(goMenuItemButton->getContentSize().width) * 2, 0)));
-			gameRoundCount++;
-			refreshRoundDisplay();
+		case PLAYER_1_TAG:
+		{
+			showBuyLandDialog(MSG_BUY_BLANK_TAG);
 			break;
 		}
-	case MSG_GO_HIDE_TAG:
-	{
-		goMenuItemButton->runAction(MoveBy::create(0.3, Vec2((goMenuItemButton->getContentSize().width) * 2, 0)));
+		case PLAYER_2_TAG:
+		{
+			landLayer->setTileGID(player2_building_1_tiledID, Vec2(buy_land_x, buy_land_y));
+			auto dispatcher = Director::getInstance()->getEventDispatcher();
+			EventCustom _event = EventCustom(RICHER_CONTROLLER_MSG);
+			_event.setUserData(String::createWithFormat("%d", MSG_PICKONE_TOGO_TAG));
+			dispatcher->dispatchEvent(&_event);
+			break;
+		}
+		default:
+			break;
+		}
 		break;
 	}
 	default:
 		break;
 	}
 }
+
+//void GameBaseScene::receivedNotificationMsg(Ref * data)
+//{
+//	__String *srcDate = (__String*)data;
+//	Vector<__String *>messageVector = Util::splitString(srcDate->getCString(), "-");
+//	int retMsgType = messageVector.at(0)->intValue();
+//	log("received go message is : %d", retMsgType);
+//
+//	switch (retMsgType)
+//	{
+//	case MSG_GO_SHOW_TAG:
+//		{
+//			goMenuItemButton->runAction(MoveBy::create(0.3, Vec2(-(goMenuItemButton->getContentSize().width) * 2, 0)));
+//			gameRoundCount++;
+//			refreshRoundDisplay();
+//			break;
+//		}
+//	case MSG_GO_HIDE_TAG:
+//	{
+//		goMenuItemButton->runAction(MoveBy::create(0.3, Vec2((goMenuItemButton->getContentSize().width) * 2, 0)));
+//		break;
+//	}
+//	default:
+//		break;
+//	}
+//}
 
 void GameBaseScene::addDigiteRoundSprite()
 {
@@ -350,4 +396,73 @@ void GameBaseScene::drawPathColor(std::vector<int> rowVector, std::vector<int> c
 		pathMarkVector.at(i - 1)->setPosition(Vec2(colVector[i] * 32, rowVector[i] * 32));
 		pathMarkVector.at(i - 1)->setVisible(true);
 	}
+}
+
+void GameBaseScene::initPopDialog()
+{
+	popDialog = PopupLayer::create(DIALOG_BG);
+	popDialog->setPopModalDialog(false);
+	popDialog->setContentSize(Size(Dialog_Size_Width, Dialog_Size_Height));
+	popDialog->setTitle(DIALOG_TITLE);
+	popDialog->setContentText("", 20, 60, 250);
+	popDialog->setCallbackFunc(this, callfuncN_selector(GameBaseScene::buyLandCallBack));
+
+	popDialog->addButton(BUTTON_BG1, BUTTON_BG3, OK, Btn_OK_tag);
+	popDialog->addButton(BUTTON_BG2, BUTTON_BG3, CANCEL, Btn_Cancel_tag);
+	this->addChild(popDialog);
+	popDialog->setVisible(false);
+}
+
+void GameBaseScene::initLandLayerFromMap()
+{
+	landLayer = _map->getLayer("land");
+}
+
+void GameBaseScene::showBuyLandDialog(int landTag)
+{
+	String showMessage = "";
+	switch (landTag)
+	{
+	case MSG_BUY_BLANK_TAG:
+	{
+		showMessage = __String::createWithFormat("Do you want to buy the land ? need $ %d", LAND_BLANK_MONEY)->getCString();
+		break;
+	}
+	case MSG_BUY_LAND_1_TAG:
+	{
+		showMessage = __String::createWithFormat("Do you want to buy the land ? need $ %d", LAND_LEVEL_1_MONEY)->getCString();
+		break;
+	}
+	default:
+		break;
+	}
+	popDialog->setDataTag(landTag);
+	popDialog->getLabelContentText()->setString(showMessage.getCString());
+	popDialog->setVisible(true);
+}
+
+void GameBaseScene::buyLandCallBack(Node *pNode)
+{
+	if (pNode->getTag() == Btn_OK_tag)
+	{
+		switch (popDialog->getDataTag())
+		{
+		case MSG_BUY_BLANK_TAG:
+		{
+			landLayer->setTileGID(player1_building_1_tiledID, Vec2(buy_land_x, buy_land_y));
+			log("need $1000");
+			break;
+		}
+		case MSG_BUY_LAND_1_TAG: 
+		{
+			break;
+		}
+		default:
+			break;
+		}
+	}
+	popDialog->setVisible(false);
+	EventCustom _event = EventCustom(RICHER_CONTROLLER_MSG);
+	_event.setUserData(__String::createWithFormat("%d", MSG_PICKONE_TOGO_TAG));
+	Director::getInstance()->getEventDispatcher()->dispatchEvent(&_event);
 }

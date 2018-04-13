@@ -7,6 +7,7 @@
 #include "RicherPlayer.h"
 #include "RouteNavigation.h"
 #include "Util.h"
+#include "popupLayer/PopupLayer.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -23,7 +24,7 @@ const int goButtonTag = 700;
 class GameBaseScene : public Layer {
 public:
 	static Scene *createScene();
-	TMXTiledMap *_map;
+	static TMXTiledMap *_map;
 	virtual bool init();
 
 	CREATE_FUNC(GameBaseScene);
@@ -31,6 +32,7 @@ public:
 	static int tiledColsCount;
 	static int tiledRowsCount;
 	static bool **canPassGrid;
+	static TMXLayer *landLayer;
 	static TMXLayer *wayLayer;
 	std::vector<Vec2> wayLayerPass_vector;
 	CC_SYNTHESIZE(Menu *, _menu, Menu);
@@ -50,6 +52,22 @@ public:
 	static Vector<RicherPlayer*> players_vector;
 	static Vector<Sprite *> pathMarkVector;
 	static void drawPathColor(std::vector<int> rowVector, std::vector<int> colVector);
+	static int blank_land_tiledID;
+	static int strength_30_tiledID;
+	static int strength_50_tiledID;
+	static int strength_80_tiledID;
+
+	static int randomEvent_tiledID;
+	static int lottery_tiledID;
+	static int stock_tiledID;
+
+	static int player1_building_1_tiledID;
+	static int player1_building_2_tiledID;
+	static int player1_building_3_tiledID;
+
+	static int player2_building_1_tiledID;
+	static int player2_building_2_tiledID;
+	static int player2_building_3_tiledID;
 
 private:
 	void drawTable(int playerNumber);
@@ -63,6 +81,14 @@ private:
 	Vector<Sprite*> refreshRoundVector;
 	void refreshRoundDisplay();
 	void addPathMark();
+
+	PopupLayer *popDialog;
+	void initPopDialog();
+	void initLandLayerFromMap();
+	int buy_land_x;
+	int buy_land_y;
+	void showBuyLandDialog(int landTag);
+	void buyLandCallBack(Node *pNode);
 };
 
 #endif

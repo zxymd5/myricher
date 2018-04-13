@@ -20,27 +20,34 @@ bool PopupLayer::init()
 	menu->setPosition(Point::ZERO);
 	setMenuButton(menu);
 
-	auto listener = EventListenerTouchOneByOne::create();
-	listener->setSwallowTouches(true);
-	
-	listener->onTouchBegan = [](Touch *t, Event *e) {
-		log("PopupLayer touch");
-		return true;
-	};
-	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 	return true;
 }
 
-void PopupLayer::setPopType(POP_TYPE type)
+void PopupLayer::setPopModalDialog(bool mD)
 {
-	pop_type = type;
+	if (mD)
+	{
+		auto listener = EventListenerTouchOneByOne::create();
+		listener->setSwallowTouches(true);
+
+		listener->onTouchBegan = [](Touch *t, Event *e) {
+			log("PopupLayer touch");
+			return true;
+		};
+		_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+	}
 }
 
 PopupLayer * PopupLayer::create(const char *backgroundImage)
 {
 	PopupLayer *ml = PopupLayer::create();
-	ml->setSprite9BackGround(Scale9Sprite::create(backgroundImage));
+	ml->setSprite9BackGround(cocos2d::ui::Scale9Sprite::create(backgroundImage));
 	return ml;
+}
+
+void PopupLayer::setPopType(POP_TYPE type)
+{
+	pop_type = type;
 }
 
 void PopupLayer::setTitle(const char *title, int fontSize /*= Pop_FontSize*/)

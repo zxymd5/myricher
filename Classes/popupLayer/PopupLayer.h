@@ -20,6 +20,7 @@ public:
 	CREATE_FUNC(PopupLayer);
 	POP_TYPE pop_type;
 	void setPopType(POP_TYPE type);
+	void setPopModalDialog(bool mD);
 	static PopupLayer *create(const char *backgroundImage);
 	void setTitle(const char *title, int fontSize = Pop_FontSize);
 	void setContentText(const char *text, int fontSize = Pop_FontSize, int padding = 50, int paddingTop = 100);
@@ -36,9 +37,10 @@ private:
 	SEL_CallFuncN m_callback;
 	CC_SYNTHESIZE_RETAIN(Menu *, m__pMenu, MenuButton);
 	CC_SYNTHESIZE_RETAIN(Sprite *, m__sfBackGround, SpriteBackGround);
-	CC_SYNTHESIZE_RETAIN(Scale9Sprite *, m__s9BackGround, Sprite9BackGround);
+	CC_SYNTHESIZE_RETAIN(cocos2d::ui::Scale9Sprite *, m__s9BackGround, Sprite9BackGround);
 	CC_SYNTHESIZE_RETAIN(Label *, m__ltTitle, LabelTitle);
 	CC_SYNTHESIZE_RETAIN(Label *, m__ltContentText, LabelContentText);
+	CC_SYNTHESIZE(int, dataTag, DataTag);
 };
 
 #endif

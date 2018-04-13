@@ -35,6 +35,12 @@ private:
 	std::vector<int> _colVector;
 	RicherPlayer *_richerPlayer;
 	void pickOnePlayerToGo();
+
+	void handlePropEvent();
+	float **positionAroundEnd;
+	EventListenerCustom *controllerCustomListener;
+	void registerNotificationObserver();
+	void receivedMsg(EventCustom *event);
 };
 
 #endif // !__RICHER_GAME_CONTROLLER_H__

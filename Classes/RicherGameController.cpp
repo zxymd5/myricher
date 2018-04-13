@@ -10,6 +10,13 @@ bool RicherGameController::init()
 		return false;
 	}
 	callEndGoFunc = CallFunc::create(CC_CALLBACK_0(RicherGameController::endGo, this));
+	registerNotificationObserver();
+
+	positionAroundEnd = new float *[4];
+	for (int i = 0; i < 4; i++)
+	{
+		positionAroundEnd[i] = new float[2];
+	}
 	return true;
 }
 
@@ -84,8 +91,9 @@ void RicherGameController::endGo()
 	stepHasGone++;
 	if (stepHasGone >= stepsCount)
 	{
-		_richerPlayer->setIsMyTurn(false);
-		pickOnePlayerToGo();
+		//_richerPlayer->setIsMyTurn(false);
+		//pickOnePlayerToGo();
+		handlePropEvent();
 		return;
 	}
 	currentRow = nextRow;
@@ -118,4 +126,62 @@ void RicherGameController::pickOnePlayerToGo()
 	EventCustom _event = EventCustom(RICHER_MSG);
 	_event.setUserData(__String::createWithFormat("%d", MSG_GO_SHOW_TAG));
 	dispatcher->dispatchEvent(&_event);
+}
+
+void RicherGameController::handlePropEvent()
+{
+	float playerEnd_X = _colVector[stepsCount] * 32;
+	float playerEnd_Y = _rowVector[stepsCount] * 32 + 32;
+
+	// up
+	positionAroundEnd[0][0] = playerEnd_X;
+	positionAroundEnd[0][1] = playerEnd_Y + 32;
+
+	// down
+	positionAroundEnd[1][0] = playerEnd_X;
+	positionAroundEnd[1][1] = playerEnd_Y - 32;
+
+	// left
+	positionAroundEnd[2][0] = playerEnd_X - 32;
+	positionAroundEnd[2][1] = playerEnd_Y;
+
+	// right
+	positionAroundEnd[3][0] = playerEnd_X + 32;
+	positionAroundEnd[3][1] = playerEnd_Y;
+
+	log("handlePropEvent() called");
+
+	for (int i = 0; i < 4; i++)
+	{
+		Point ptMap = Util::GL2map(Vec2(positionAroundEnd[i][0], positionAroundEnd[i][1]), GameBaseScene::_map);
+		int titleId = GameBaseScene::landLayer->getTileGIDAt(ptMap);
+		if (titleId == GameBaseScene::blank_land_tiledID)
+		{
+			int x = ptMap.x;
+			int y = ptMap.y;
+
+			auto dispatcher = Director::getInstance()->getEventDispatcher();
+			EventCustom _event = EventCustom(RICHER_MSG);
+			_event.setUserData(__String::createWithFormat("%d-%d-%d-%d", MSG_BUY_BLANK_TAG, x, y, _richerPlayer->getTag()));
+			dispatcher->dispatchEvent(&_event);
+			break;
+		}
+	}
+}
+
+void RicherGameController::registerNotificationObserver()
+{
+	auto dispatcher = Director::getInstance()->getEventDispatcher();
+	controllerCustomListener = EventListenerCustom::create(RICHER_MSG, CC_CALLBACK_1(RicherGameController::receivedMsg, this));
+	dispatcher->addEventListenerWithFixedPriority(controllerCustomListener, 1);
+}
+
+void RicherGameController::receivedMsg(EventCustom * event)
+{
+	__String *srcDate = (__String*)event->getUserData();
+	int retMsgType = srcDate->intValue();
+	if (retMsgType == MSG_PICKONE_TOGO_TAG)
+	{
+		pickOnePlayerToGo();
+	}
 }

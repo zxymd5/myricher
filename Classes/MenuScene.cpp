@@ -168,6 +168,7 @@ void MenuScene::addMenuSprites()
 void MenuScene::popupQuitLayer()
 {
 	PopupLayer *popDialog = PopupLayer::create(DIALOG_BG);
+	popDialog->setPopModalDialog(true);
 	popDialog->setContentSize(Size(Quit_Dialog_Size_Width, Quit_Dialog_Size_Height));
 	popDialog->setTitle(DIALOG_TITLE);
 	popDialog->setContentText(DIALOG_CONTENT, 20, 60, 250);

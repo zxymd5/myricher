@@ -12,6 +12,7 @@ public:
 	void addMap();
 	virtual bool init();
 	void initTiledGrid();
+	void initPropTiledID();
 	CREATE_FUNC(Map2Scene);
 };
 

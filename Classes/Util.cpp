@@ -27,3 +27,25 @@ Vector<__String*> Util::splitString(const char * srcStr, const char * sSep)
 
 	return stringList;
 }
+
+Point Util::map2GL(const Point & ptMap, TMXTiledMap * map)
+{
+	Point ptUI;
+	ptUI.x = ptMap.x * map->getTileSize().width;
+	ptUI.y = (ptMap.y + 1) * map->getTileSize().height;
+
+	Point ptGL = ptUI;
+	ptGL.y = map->getContentSize().height - ptUI.y;
+	return ptGL;
+}
+
+Point Util::GL2map(const Point & ptGL, TMXTiledMap * map)
+{
+	Point ptUI = ptGL;
+	ptUI.y = map->getContentSize().height - ptGL.y;
+
+	int x = ptUI.x / map->getTileSize().width;
+	int y = ptUI.y / map->getTileSize().height;
+
+	return Vec2(x, y);
+}

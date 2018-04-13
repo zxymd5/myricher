@@ -32,6 +32,11 @@
 #define OK "yes"
 #define CANCEL "no"
 
+const int Dialog_Size_Width = 400;
+const int Dialog_Size_Height = 220;
+const int Btn_OK_tag = 1;
+const int Btn_Cancel_tag = 0;
+
 #define STAGE_BACKGROUND "map/stage_background2.png"
 #define MAP_1 "map/map_1.png"
 #define MAP_2 "map/map_2.png"
@@ -59,8 +64,16 @@ const int PLAYER_1_TAG = 1;
 const int PLAYER_2_TAG = 2;
 
 #define RICHER_MSG "richer_msg"
+#define RICHER_CONTROLLER_MSG "richer_controller_msg"
 const int MSG_GO_HIDE_TAG = 0;
 const int MSG_GO_SHOW_TAG = 1;
+const int MSG_BUY_BLANK_TAG = 2;
+const int MSG_BUY_LAND_1_TAG = 3;
+const int MSG_BUY_LAND_2_TAG = 4;
+const int MSG_PICKONE_TOGO_TAG = 5;
+
+const int LAND_BLANK_MONEY = 1000;
+const int LAND_LEVEL_1_MONEY = 2000;
 
 #define DIGITAL_0 "digital_0.png"
 #define DIGITAL_1 "digital_1.png"
