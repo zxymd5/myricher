@@ -93,4 +93,13 @@ const int LAND_LEVEL_1_MONEY = 2000;
 #define PATH_MARK_5 "images/mark5.png"
 #define PATH_MARK_6 "images/mark6.png"
 
+#define PLAYER1_1_PARTICLE_PNG "images/foot1.png"
+#define PLAYER2_1_PARTICLE_PNG "images/foot2.png"
+#define PLAYER1_2_PARTICLE_PNG "images/starfish1.png"
+#define PLAYER2_2_PARTICLE_PNG "images/starfish2.png"
+#define PLAYER1_3_PARTICLE_PNG "images/heart1.png"
+#define PLAYER2_3_PARTICLE_PNG "images/heart2.png"
+#define PLAYER1_1_PARTICLE_PLIST "images/showClick.plist"
+#define PLAYER2_1_PARTICLE_PLIST "images/fire.plist"
+
 #endif

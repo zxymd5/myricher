@@ -50,6 +50,7 @@ bool GameBaseScene::init()
 	refreshRoundDisplay();
 	initLandLayerFromMap();
 	initPopDialog();
+	doSomeForParticle();
 	return true;
 }
 
@@ -255,12 +256,28 @@ void GameBaseScene::onReceiveCustomEvent(EventCustom * event)
 		}
 		case PLAYER_2_TAG:
 		{
-			landLayer->setTileGID(player2_building_1_tiledID, Vec2(buy_land_x, buy_land_y));
-			auto dispatcher = Director::getInstance()->getEventDispatcher();
-			EventCustom _event = EventCustom(RICHER_CONTROLLER_MSG);
-			_event.setUserData(String::createWithFormat("%d", MSG_PICKONE_TOGO_TAG));
-			dispatcher->dispatchEvent(&_event);
+			Point pointOfGL = Util::map2GL(Vec2(buy_land_x, buy_land_y), GameBaseScene::_map);
+			foot2Sprite->setVisible(true);
+			foot2Sprite->setPosition(pointOfGL);
+			Point pointOfMap = Vec2(buy_land_x, buy_land_y);
+			foot2Sprite->runAction(Sequence::create(scaleby1ForBuyLand, scaleby2ForBuyLand, CallFunc::create([this, pointOfMap, pointOfGL]() {
+				playParticle(pointOfGL, PLAYER2_1_PARTICLE_PLIST);
+				foot2Sprite->setVisible(false);
+				landLayer->setTileGID(player2_building_1_tiledID, Vec2(buy_land_x, buy_land_y));
+				auto dispatcher = Director::getInstance()->getEventDispatcher();
+				EventCustom _event = EventCustom(RICHER_CONTROLLER_MSG);
+				_event.setUserData(__String::createWithFormat("%d", MSG_PICKONE_TOGO_TAG));
+				dispatcher->dispatchEvent(&_event);
+			}
+			), NULL));
 			break;
+
+			//landLayer->setTileGID(player2_building_1_tiledID, Vec2(buy_land_x, buy_land_y));
+			//auto dispatcher = Director::getInstance()->getEventDispatcher();
+			//EventCustom _event = EventCustom(RICHER_CONTROLLER_MSG);
+			//_event.setUserData(String::createWithFormat("%d", MSG_PICKONE_TOGO_TAG));
+			//dispatcher->dispatchEvent(&_event);
+			//break;
 		}
 		default:
 			break;
@@ -420,7 +437,7 @@ void GameBaseScene::initLandLayerFromMap()
 
 void GameBaseScene::showBuyLandDialog(int landTag)
 {
-	String showMessage = "";
+	__String showMessage = "";
 	switch (landTag)
 	{
 	case MSG_BUY_BLANK_TAG:
@@ -449,7 +466,18 @@ void GameBaseScene::buyLandCallBack(Node *pNode)
 		{
 		case MSG_BUY_BLANK_TAG:
 		{
-			landLayer->setTileGID(player1_building_1_tiledID, Vec2(buy_land_x, buy_land_y));
+			Point pointOfGL = Util::map2GL(Vec2(buy_land_x, buy_land_y), GameBaseScene::_map);
+			foot1Sprite->setVisible(true);
+			foot1Sprite->setPosition(pointOfGL);
+			Point pointOfMap = Vec2(buy_land_x, buy_land_y);
+			foot1Sprite->runAction(Sequence::create(scaleby1ForBuyLand, scaleby2ForBuyLand, CallFunc::create([this, pointOfMap, pointOfGL]() {
+				playParticle(pointOfGL, PLAYER1_1_PARTICLE_PLIST);
+				foot1Sprite->setVisible(false);
+				landLayer->setTileGID(player1_building_1_tiledID, pointOfMap);
+			}
+			), NULL));
+
+			//landLayer->setTileGID(player1_building_1_tiledID, Vec2(buy_land_x, buy_land_y));
 			log("need $1000");
 			break;
 		}
@@ -465,4 +493,32 @@ void GameBaseScene::buyLandCallBack(Node *pNode)
 	EventCustom _event = EventCustom(RICHER_CONTROLLER_MSG);
 	_event.setUserData(__String::createWithFormat("%d", MSG_PICKONE_TOGO_TAG));
 	Director::getInstance()->getEventDispatcher()->dispatchEvent(&_event);
+}
+
+void GameBaseScene::doSomeForParticle()
+{
+	scaleby1ForBuyLand = ScaleBy::create(0.1, 1.5);
+	scaleby2ForBuyLand = ScaleBy::create(0.5, 0.7);
+	scaleby1ForBuyLand->retain();
+	scaleby2ForBuyLand->retain();
+	foot1Sprite = Sprite::create(PLAYER1_1_PARTICLE_PNG);
+	addChild(foot1Sprite);
+	foot1Sprite->setAnchorPoint(Vec2(0, 0));
+
+	foot2Sprite = Sprite::create(PLAYER2_1_PARTICLE_PNG);
+	addChild(foot2Sprite);
+	foot2Sprite->setAnchorPoint(Vec2(0, 0));
+}
+
+void GameBaseScene::playParticle(Point point, char * plistName)
+{
+	ParticleSystem *particleSystem_foot = ParticleSystem::create(plistName);
+	particleSystem_foot->retain();
+	ParticleBatchNode *batch = ParticleBatchNode::createWithTexture(particleSystem_foot->getTexture());
+	batch->addChild(particleSystem_foot);
+	addChild(batch);
+
+	particleSystem_foot->setPosition(point + Vec2(tiledWidth / 2, tiledHeight / 2));
+	particleSystem_foot->release();
+	particleSystem_foot->setAutoRemoveOnFinish(true);
 }

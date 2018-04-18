@@ -74,7 +74,7 @@ private:
 	void addPlayer();
 	void addRightBanner();
 	void addNotificationObserver();
-	void receivedNotificationMsg(Ref *data);
+	//void receivedNotificationMsg(Ref *data);
 	void addDigiteRoundSprite();
 	int gameRoundCount;
 	Vector<SpriteFrame *>digiteRoundVector;
@@ -89,6 +89,18 @@ private:
 	int buy_land_y;
 	void showBuyLandDialog(int landTag);
 	void buyLandCallBack(Node *pNode);
+	void doSomeForParticle();
+	FadeOut *landFadeOut;
+	FadeIn *landFadeIn;
+	Sprite *foot1Sprite;
+	Sprite *foot2Sprite;
+	Sprite *starFish1Sprite;
+	Sprite *starFish2Sprite;
+	Sprite *heart1Sprite;
+	Sprite *heart2Sprite;
+	ActionInterval *scaleby1ForBuyLand;
+	ActionInterval *scaleby2ForBuyLand;
+	void playParticle(Point point, char *plistName);
 };
 
 #endif
