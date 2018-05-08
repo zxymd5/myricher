@@ -68,10 +68,10 @@ void GameBaseScene::addPlayer()
 	player_1->setPosition(tableStartPosition_x + tableWidth / 2, tableStartPosition_y - tableHeight);
 	addChild(player_1);
 
-	Label *player_1_money = Label::createWithTTF("$", FONT_MENU, 25);
-	player_1_money->setAnchorPoint(Vec2(0, 0.5));
-	player_1_money->setPosition(tableStartPosition_x + tableWidth, tableStartPosition_y - tableHeight / 2);
-	addChild(player_1_money);
+	player1_money_label = Label::createWithTTF("$", FONT_MENU, 25);
+	player1_money_label->setAnchorPoint(Vec2(0, 0.5));
+	player1_money_label->setPosition(tableStartPosition_x + tableWidth, tableStartPosition_y - tableHeight / 2);
+	addChild(player1_money_label);
 
 	Label *player_1_strength = Label::createWithTTF("+", FONT_MENU, 28);
 	player_1_strength->setAnchorPoint(Vec2(0, 0.5));
@@ -82,10 +82,10 @@ void GameBaseScene::addPlayer()
 	player_2->setPosition(tableStartPosition_x + tableWidth / 2, tableStartPosition_y - 3 * tableHeight);
 	addChild(player_2);
 
-	Label *player_2_money = Label::createWithTTF("$", FONT_MENU, 25);
-	player_2_money->setAnchorPoint(Vec2(0, 0.5));
-	player_2_money->setPosition(tableStartPosition_x + tableWidth, tableStartPosition_y - tableHeight / 2 * 5);
-	addChild(player_2_money);
+	player2_money_label = Label::createWithTTF("$", FONT_MENU, 25);
+	player2_money_label->setAnchorPoint(Vec2(0, 0.5));
+	player2_money_label->setPosition(tableStartPosition_x + tableWidth, tableStartPosition_y - tableHeight / 2 * 5);
+	addChild(player2_money_label);
 
 	Label *player_2_strength = Label::createWithTTF("+", FONT_MENU, 28);
 	player_2_strength->setAnchorPoint(Vec2(0, 0.5));
@@ -115,6 +115,14 @@ void GameBaseScene::addPlayer()
 	player2->setAnchorPoint(Vec2(0, 0.5));
 	addChild(player2);
 	players_vector.pushBack(player2);
+
+	memset(money1, 0, 20);
+	sprintf(money1, "$ %d", player1->getMoney());
+	getPlayer1_money_label()->setString(money1);
+
+	memset(money2, 0, 20);
+	sprintf(money2, "$ %d", player2->getMoney());
+	getPlayer2_money_label()->setString(money2);
 }
 
 void GameBaseScene::drawTable(int playerNumber)
@@ -196,10 +204,13 @@ void GameBaseScene::menuButtonCallback(Ref * pSender)
 			log(" rowVector row is %d -- colVector col is %d", rowVector[i], colVector[i]);
 		}
 		//NotificationCenter::getInstance()->postNotification(RICHER_MSG, __String::createWithFormat("%d", MSG_GO_HIDE_TAG));
-		auto dispatcher = Director::getInstance()->getEventDispatcher();
-		EventCustom _event = EventCustom(RICHER_MSG);
-		_event.setUserData(__String::createWithFormat("%d", MSG_GO_HIDE_TAG));
-		dispatcher->dispatchEvent(&_event);
+		//auto dispatcher = Director::getInstance()->getEventDispatcher();
+		//EventCustom _event = EventCustom(RICHER_MSG);
+		//_event.setUserData(__String::createWithFormat("%d", MSG_GO_HIDE_TAG));
+		//dispatcher->dispatchEvent(&_event);
+		//player1->startGo(rowVector, colVector);
+		//log("go button clicked over");
+		Util::sendCustomEvent(RICHER_MSG, __String::createWithFormat("%d", MSG_GO_HIDE_TAG));
 		player1->startGo(rowVector, colVector);
 		log("go button clicked over");
 	}
@@ -209,6 +220,10 @@ void GameBaseScene::onExit()
 {
 	Director::getInstance()->getEventDispatcher()->removeEventListener(customListener);
 	CC_SAFE_DELETE(canPassGrid);
+	scaleby1ForBuyLand->release();
+	scaleby2ForBuyLand->release();
+	landFadeOut->release();
+	landFadeIn->release();
 	Layer::onExit();
 }
 
@@ -256,32 +271,59 @@ void GameBaseScene::onReceiveCustomEvent(EventCustom * event)
 		}
 		case PLAYER_2_TAG:
 		{
-			Point pointOfGL = Util::map2GL(Vec2(buy_land_x, buy_land_y), GameBaseScene::_map);
-			foot2Sprite->setVisible(true);
-			foot2Sprite->setPosition(pointOfGL);
-			Point pointOfMap = Vec2(buy_land_x, buy_land_y);
-			foot2Sprite->runAction(Sequence::create(scaleby1ForBuyLand, scaleby2ForBuyLand, CallFunc::create([this, pointOfMap, pointOfGL]() {
-				playParticle(pointOfGL, PLAYER2_1_PARTICLE_PLIST);
-				foot2Sprite->setVisible(false);
-				landLayer->setTileGID(player2_building_1_tiledID, Vec2(buy_land_x, buy_land_y));
-				auto dispatcher = Director::getInstance()->getEventDispatcher();
-				EventCustom _event = EventCustom(RICHER_CONTROLLER_MSG);
-				_event.setUserData(__String::createWithFormat("%d", MSG_PICKONE_TOGO_TAG));
-				dispatcher->dispatchEvent(&_event);
-			}
-			), NULL));
+			buyLand(MSG_BUY_BLANK_TAG, buy_land_x, buy_land_y, foot2Sprite, player2_building_1_tiledID, player2, PLAYER2_1_PARTICLE_PLIST);
+			Util::sendCustomEvent(RICHER_CONTROLLER_MSG, __String::createWithFormat("%d", MSG_PICKONE_TOGO_TAG));
 			break;
-
-			//landLayer->setTileGID(player2_building_1_tiledID, Vec2(buy_land_x, buy_land_y));
-			//auto dispatcher = Director::getInstance()->getEventDispatcher();
-			//EventCustom _event = EventCustom(RICHER_CONTROLLER_MSG);
-			//_event.setUserData(String::createWithFormat("%d", MSG_PICKONE_TOGO_TAG));
-			//dispatcher->dispatchEvent(&_event);
-			//break;
 		}
 		default:
 			break;
 		}
+		break;
+	}
+	case MSG_BUY_LAND_1_TAG:
+	{
+		buy_land_x = messageVector.at(1)->intValue();
+		buy_land_y = messageVector.at(2)->intValue();
+		int playerTag = messageVector.at(3)->intValue();
+		switch (playerTag)
+		{
+		case PLAYER_1_TAG:
+		{
+			showBuyLandDialog(MSG_BUY_LAND_1_TAG);
+			break;
+		}
+		case PLAYER_2_TAG:
+		{
+			buyLand(MSG_BUY_LAND_1_TAG, buy_land_x, buy_land_y, starFish2Sprite, player2_building_2_tiledID, player2, PLAYER2_1_PARTICLE_PLIST);
+			Util::sendCustomEvent(RICHER_CONTROLLER_MSG, __String::createWithFormat("%d", MSG_PICKONE_TOGO_TAG));
+			break;
+		}
+		default:
+			break;
+		}
+	}
+	case MSG_BUY_LAND_2_TAG:
+	{
+		buy_land_x = messageVector.at(1)->intValue();
+		buy_land_y = messageVector.at(2)->intValue();
+		int playerTag = messageVector.at(3)->intValue();
+		switch (playerTag)
+		{
+		case PLAYER_1_TAG:
+		{
+			showBuyLandDialog(MSG_BUY_LAND_2_TAG);
+			break;
+		}
+		case PLAYER_2_TAG:
+		{
+			buyLand(MSG_BUY_LAND_2_TAG, buy_land_x, buy_land_y, heart2Sprite, player1_building_3_tiledID, player2, PLAYER2_1_PARTICLE_PLIST);
+			Util::sendCustomEvent(RICHER_CONTROLLER_MSG, __String::createWithFormat("%d", MSG_PICKONE_TOGO_TAG));
+			break;
+		}
+		default:
+			break;
+		}
+
 		break;
 	}
 	default:
@@ -450,6 +492,11 @@ void GameBaseScene::showBuyLandDialog(int landTag)
 		showMessage = __String::createWithFormat("Do you want to buy the land ? need $ %d", LAND_LEVEL_1_MONEY)->getCString();
 		break;
 	}
+	case MSG_BUY_LAND_2_TAG:
+	{
+		showMessage = __String::createWithFormat("Do you want to buy the land ? need $ %d", LAND_LEVEL_2_MONEY)->getCString();
+		break;
+	}
 	default:
 		break;
 	}
@@ -466,23 +513,20 @@ void GameBaseScene::buyLandCallBack(Node *pNode)
 		{
 		case MSG_BUY_BLANK_TAG:
 		{
-			Point pointOfGL = Util::map2GL(Vec2(buy_land_x, buy_land_y), GameBaseScene::_map);
-			foot1Sprite->setVisible(true);
-			foot1Sprite->setPosition(pointOfGL);
-			Point pointOfMap = Vec2(buy_land_x, buy_land_y);
-			foot1Sprite->runAction(Sequence::create(scaleby1ForBuyLand, scaleby2ForBuyLand, CallFunc::create([this, pointOfMap, pointOfGL]() {
-				playParticle(pointOfGL, PLAYER1_1_PARTICLE_PLIST);
-				foot1Sprite->setVisible(false);
-				landLayer->setTileGID(player1_building_1_tiledID, pointOfMap);
-			}
-			), NULL));
-
-			//landLayer->setTileGID(player1_building_1_tiledID, Vec2(buy_land_x, buy_land_y));
+			buyLand(MSG_BUY_BLANK_TAG, buy_land_x, buy_land_y, foot1Sprite, player1_building_1_tiledID, player1, PLAYER1_1_PARTICLE_PLIST);
 			log("need $1000");
 			break;
 		}
 		case MSG_BUY_LAND_1_TAG: 
 		{
+			buyLand(MSG_BUY_LAND_1_TAG, buy_land_x, buy_land_y, starFish1Sprite, player1_building_2_tiledID, player1, PLAYER1_1_PARTICLE_PLIST);
+			log("need $2000");
+			break;
+		}
+		case MSG_BUY_LAND_2_TAG:
+		{
+			buyLand(MSG_BUY_LAND_2_TAG, buy_land_x, buy_land_y, heart1Sprite, player1_building_3_tiledID, player1, PLAYER1_1_PARTICLE_PLIST);
+			log("need $3000");
 			break;
 		}
 		default:
@@ -490,13 +534,19 @@ void GameBaseScene::buyLandCallBack(Node *pNode)
 		}
 	}
 	popDialog->setVisible(false);
-	EventCustom _event = EventCustom(RICHER_CONTROLLER_MSG);
-	_event.setUserData(__String::createWithFormat("%d", MSG_PICKONE_TOGO_TAG));
-	Director::getInstance()->getEventDispatcher()->dispatchEvent(&_event);
+	Util::sendCustomEvent(RICHER_CONTROLLER_MSG, __String::createWithFormat("%d", MSG_PICKONE_TOGO_TAG));
+	//EventCustom _event = EventCustom(RICHER_CONTROLLER_MSG);
+	//_event.setUserData(__String::createWithFormat("%d", MSG_PICKONE_TOGO_TAG));
+	//Director::getInstance()->getEventDispatcher()->dispatchEvent(&_event);
 }
 
 void GameBaseScene::doSomeForParticle()
 {
+	landFadeOut = FadeOut::create(0.1);
+	landFadeIn = FadeIn::create(0.1);
+	landFadeOut->retain();
+	landFadeIn->retain();
+
 	scaleby1ForBuyLand = ScaleBy::create(0.1, 1.5);
 	scaleby2ForBuyLand = ScaleBy::create(0.5, 0.7);
 	scaleby1ForBuyLand->retain();
@@ -521,4 +571,21 @@ void GameBaseScene::playParticle(Point point, char * plistName)
 	particleSystem_foot->setPosition(point + Vec2(tiledWidth / 2, tiledHeight / 2));
 	particleSystem_foot->release();
 	particleSystem_foot->setAutoRemoveOnFinish(true);
+}
+
+void GameBaseScene::buyLand(int buyTag, float x, float y, Sprite * landSprite, int landLevel, RicherPlayer * player, char * particlelistName)
+{
+}
+
+void GameBaseScene::refreshMoneyLabel(RicherPlayer * player, int money)
+{
+}
+
+void GameBaseScene::payTolls(int payTag, float x, float y, int playerTag)
+{
+}
+
+RicherPlayer * GameBaseScene::getPlayerByTiled(float x, float y)
+{
+	return nullptr;
 }

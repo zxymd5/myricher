@@ -71,9 +71,13 @@ const int MSG_BUY_BLANK_TAG = 2;
 const int MSG_BUY_LAND_1_TAG = 3;
 const int MSG_BUY_LAND_2_TAG = 4;
 const int MSG_PICKONE_TOGO_TAG = 5;
+const int MSG_PAY_TOLLS_1_TAG = 6;
+const int MSG_PAY_TOLLS_2_TAG = 7;
+const int MSG_PAY_TOLLS_3_TAG = 8;
 
 const int LAND_BLANK_MONEY = 1000;
 const int LAND_LEVEL_1_MONEY = 2000;
+const int LAND_LEVEL_2_MONEY = 3000;
 
 #define DIGITAL_0 "digital_0.png"
 #define DIGITAL_1 "digital_1.png"

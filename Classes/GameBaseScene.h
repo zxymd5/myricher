@@ -36,6 +36,8 @@ public:
 	static TMXLayer *wayLayer;
 	std::vector<Vec2> wayLayerPass_vector;
 	CC_SYNTHESIZE(Menu *, _menu, Menu);
+	CC_SYNTHESIZE(Label *, player1_money_label, Player1_money_label);
+	CC_SYNTHESIZE(Label *, player2_money_label, Player2_money_label);
 	MenuItemImage *goMenuItemButton;
 	int randStepsNumber;
 
@@ -101,6 +103,12 @@ private:
 	ActionInterval *scaleby1ForBuyLand;
 	ActionInterval *scaleby2ForBuyLand;
 	void playParticle(Point point, char *plistName);
+	void buyLand(int buyTag, float x, float y, Sprite *landSprite, int landLevel, RicherPlayer *player, char *particlelistName);
+	void refreshMoneyLabel(RicherPlayer *player, int money);
+	char money1[20];
+	char money2[20];
+	void payTolls(int payTag, float x, float y, int playerTag);
+	RicherPlayer *getPlayerByTiled(float x, float y);
 };
 
 #endif

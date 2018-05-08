@@ -49,3 +49,11 @@ Point Util::GL2map(const Point & ptGL, TMXTiledMap * map)
 
 	return Vec2(x, y);
 }
+
+void Util::sendCustomEvent(const std::string messageType, __String * message)
+{
+	auto dispatcher = Director::getInstance()->getEventDispatcher();
+	EventCustom _event = EventCustom(messageType);
+	_event.setUserData(message);
+	dispatcher->dispatchEvent(&_event);
+}
