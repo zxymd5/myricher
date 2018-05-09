@@ -558,6 +558,22 @@ void GameBaseScene::doSomeForParticle()
 	foot2Sprite = Sprite::create(PLAYER2_1_PARTICLE_PNG);
 	addChild(foot2Sprite);
 	foot2Sprite->setAnchorPoint(Vec2(0, 0));
+
+	starFish1Sprite = Sprite::create(PLAYER1_2_PARTICLE_PNG);
+	addChild(starFish1Sprite);
+	starFish1Sprite->setAnchorPoint(Vec2(0, 0));
+
+	starFish2Sprite = Sprite::create(PLAYER2_2_PARTICLE_PNG);
+	addChild(starFish2Sprite);
+	starFish2Sprite->setAnchorPoint(Vec2(0, 0));
+
+	heart1Sprite = Sprite::create(PLAYER1_3_PARTICLE_PNG);
+	addChild(heart1Sprite);
+	heart1Sprite->setAnchorPoint(Vec2(0, 0));
+
+	heart2Sprite = Sprite::create(PLAYER2_3_PARTICLE_PNG);
+	addChild(heart2Sprite);
+	heart2Sprite->setAnchorPoint(Vec2(0, 0));
 }
 
 void GameBaseScene::playParticle(Point point, char * plistName)
@@ -575,10 +591,50 @@ void GameBaseScene::playParticle(Point point, char * plistName)
 
 void GameBaseScene::buyLand(int buyTag, float x, float y, Sprite * landSprite, int landLevel, RicherPlayer * player, char * particlelistName)
 {
+	int money = 0;
+	if (buyTag == MSG_BUY_BLANK_TAG)
+	{
+		money = LAND_BLANK_MONEY;
+	}
+	if (buyTag == MSG_BUY_LAND_1_TAG)
+	{
+		money = LAND_LEVEL_1_MONEY;
+	}
+	if (buyTag == MSG_BUY_LAND_2_TAG)
+	{
+		money = LAND_LEVEL_2_MONEY;
+	}
+
+	Point pointOfGL = Util::map2GL(Vec2(x, y), GameBaseScene::_map);
+	landSprite->setVisible(true);
+	landSprite->setPosition(pointOfGL);
+	Point pointOfMap = Vec2(x, y);
+	landSprite->runAction(Sequence::create(scaleby1ForBuyLand, scaleby2ForBuyLand, CallFunc::create([this, pointOfMap, pointOfGL, landSprite, landLevel, x, y, player, money, particlelistName]()
+	{
+		playParticle(pointOfGL, particlelistName);
+		landSprite->setVisible(false);
+		landLayer->setTileGID(landLevel, Vec2(x, y));
+		refreshMoneyLabel(player, -money);
+	}), NULL));
 }
 
 void GameBaseScene::refreshMoneyLabel(RicherPlayer * player, int money)
 {
+	int tag = player->getTag();
+	player->setMoney(player->getMoney() + money);
+
+	if (tag == PLAYER_1_TAG)
+	{
+		memset(money1, 0, 20);
+		sprintf(money1, "$ %d", player->getMoney());
+		getPlayer1_money_label()->setString(money1);
+	}
+	if (tag == PLAYER_2_TAG)
+	{
+		memset(money2, 0, 20);
+		sprintf(money2, "$ %d", player->getMoney());
+		getPlayer2_money_label()->setString(money2);
+	}
 }
 
 void GameBaseScene::payTolls(int payTag, float x, float y, int playerTag)

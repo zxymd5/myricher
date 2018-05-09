@@ -122,10 +122,11 @@ void RicherGameController::pickOnePlayerToGo()
 		richerPlayer->setIsMyTurn(true);
 	}
 	//NotificationCenter::getInstance()->postNotification(RICHER_MSG, String::createWithFormat("%d", MSG_GO_SHOW_TAG));
-	auto dispatcher = Director::getInstance()->getEventDispatcher();
-	EventCustom _event = EventCustom(RICHER_MSG);
-	_event.setUserData(__String::createWithFormat("%d", MSG_GO_SHOW_TAG));
-	dispatcher->dispatchEvent(&_event);
+	//auto dispatcher = Director::getInstance()->getEventDispatcher();
+	//EventCustom _event = EventCustom(RICHER_MSG);
+	//_event.setUserData(__String::createWithFormat("%d", MSG_GO_SHOW_TAG));
+	//dispatcher->dispatchEvent(&_event);
+	Util::sendCustomEvent(RICHER_MSG, __String::createWithFormat("%d", MSG_GO_SHOW_TAG));
 }
 
 void RicherGameController::handlePropEvent()
@@ -155,15 +156,69 @@ void RicherGameController::handlePropEvent()
 	{
 		Point ptMap = Util::GL2map(Vec2(positionAroundEnd[i][0], positionAroundEnd[i][1]), GameBaseScene::_map);
 		int titleId = GameBaseScene::landLayer->getTileGIDAt(ptMap);
+		int x = ptMap.x;
+		int y = ptMap.y;
+
 		if (titleId == GameBaseScene::blank_land_tiledID)
 		{
-			int x = ptMap.x;
-			int y = ptMap.y;
+			__String *str = __String::createWithFormat("%d-%d-%d-%d", MSG_BUY_BLANK_TAG, x, y, _richerPlayer->getTag());
+			Util::sendCustomEvent(RICHER_MSG, str);
+			//auto dispatcher = Director::getInstance()->getEventDispatcher();
+			//EventCustom _event = EventCustom(RICHER_MSG);
+			//_event.setUserData(__String::createWithFormat("%d-%d-%d-%d", MSG_BUY_BLANK_TAG, x, y, _richerPlayer->getTag()));
+			//dispatcher->dispatchEvent(&_event);
+			break;
+		}
 
-			auto dispatcher = Director::getInstance()->getEventDispatcher();
-			EventCustom _event = EventCustom(RICHER_MSG);
-			_event.setUserData(__String::createWithFormat("%d-%d-%d-%d", MSG_BUY_BLANK_TAG, x, y, _richerPlayer->getTag()));
-			dispatcher->dispatchEvent(&_event);
+		if (titleId == GameBaseScene::player1_building_1_tiledID)
+		{
+			if (_richerPlayer->getTag() == PLAYER_1_TAG)
+			{
+				__String *str = __String::createWithFormat("%d-%d-%d-%d", MSG_BUY_LAND_1_TAG, x, y, _richerPlayer->getTag());
+				Util::sendCustomEvent(RICHER_MSG, str);
+			}
+			break;
+		}
+
+		if (titleId == GameBaseScene::player1_building_2_tiledID)
+		{
+			if (_richerPlayer->getTag() == PLAYER_1_TAG)
+			{
+				__String *str = __String::createWithFormat("%d-%d-%d-%d", MSG_BUY_LAND_2_TAG, x, y, _richerPlayer->getTag());
+				Util::sendCustomEvent(RICHER_MSG, str);
+			}
+			break;
+		}
+
+		if (titleId == GameBaseScene::player1_building_3_tiledID)
+		{
+			Util::sendCustomEvent(RICHER_CONTROLLER_MSG, __String::createWithFormat("%d", MSG_PICKONE_TOGO_TAG));
+			break;
+		}
+
+		if (titleId == GameBaseScene::player2_building_1_tiledID)
+		{
+			if (_richerPlayer->getTag() == PLAYER_2_TAG)
+			{
+				__String *str = __String::createWithFormat("%d-%d-%d-%d", MSG_BUY_LAND_1_TAG, x, y, _richerPlayer->getTag());
+				Util::sendCustomEvent(RICHER_MSG, str);
+			}
+			break;
+		}
+
+		if (titleId == GameBaseScene::player2_building_2_tiledID)
+		{
+			if (_richerPlayer->getTag() == PLAYER_2_TAG)
+			{
+				__String *str = __String::createWithFormat("%d-%d-%d-%d", MSG_BUY_LAND_2_TAG, x, y, _richerPlayer->getTag());
+				Util::sendCustomEvent(RICHER_MSG, str);
+			}
+			break;
+		}
+
+		if (titleId == GameBaseScene::player2_building_3_tiledID)
+		{
+			Util::sendCustomEvent(RICHER_CONTROLLER_MSG, __String::createWithFormat("%d", MSG_PICKONE_TOGO_TAG));
 			break;
 		}
 	}
