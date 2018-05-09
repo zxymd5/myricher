@@ -326,6 +326,16 @@ void GameBaseScene::onReceiveCustomEvent(EventCustom * event)
 
 		break;
 	}
+	case MSG_PAY_TOLLS_1_TAG:
+	case MSG_PAY_TOLLS_2_TAG:
+	case MSG_PAY_TOLLS_3_TAG:
+	{
+		buy_land_x = messageVector.at(1)->intValue();
+		buy_land_y = messageVector.at(2)->intValue();
+		int playerTag = messageVector.at(3)->intValue();
+		payTolls(retMsgType, buy_land_x, buy_land_y, playerTag);
+		break;
+	}
 	default:
 		break;
 	}
@@ -639,9 +649,60 @@ void GameBaseScene::refreshMoneyLabel(RicherPlayer * player, int money)
 
 void GameBaseScene::payTolls(int payTag, float x, float y, int playerTag)
 {
+	int money = 0;
+	if (payTag == MSG_PAY_TOLLS_1_TAG)
+	{
+		money = LAND_BLANK_MONEY;
+	}
+	if (payTag == MSG_PAY_TOLLS_2_TAG)
+	{
+		money = LAND_LEVEL_1_MONEY;
+	}
+	if (payTag == MSG_PAY_TOLLS_3_TAG)
+	{
+		money = LAND_LEVEL_2_MONEY;
+	}
+
+	Point pointOfGL = Util::map2GL(Vec2(x, y), GameBaseScene::_map);
+	Sprite *sp = landLayer->getTileAt(Vec2(x, y));
+
+	sp->runAction(Sequence::create(landFadeOut, landFadeIn, NULL));
+
+	RicherPlayer *landOwner = getPlayerByTiled(buy_land_x, buy_land_y);
+	switch (playerTag)
+	{
+	case PLAYER_1_TAG:
+	{
+		refreshMoneyLabel(landOwner, money);
+		refreshMoneyLabel(player1, -money);
+		Util::sendCustomEvent(RICHER_CONTROLLER_MSG, __String::createWithFormat("%d", MSG_PICKONE_TOGO_TAG));
+		break;
+	}
+	case PLAYER_2_TAG:
+	{
+		refreshMoneyLabel(landOwner, money);
+		refreshMoneyLabel(player2, -money);
+		Util::sendCustomEvent(RICHER_CONTROLLER_MSG, __String::createWithFormat("%d", MSG_PICKONE_TOGO_TAG));
+		break;
+	}
+	default:
+		break;
+	}
 }
 
 RicherPlayer * GameBaseScene::getPlayerByTiled(float x, float y)
 {
-	return nullptr;
+	int gid = landLayer->getTileGIDAt(Vec2(x, y));
+	if (gid == player1_building_1_tiledID ||
+		gid == player1_building_2_tiledID ||
+		gid == player1_building_3_tiledID)
+	{
+		return player1;
+	}
+	if (gid == player2_building_1_tiledID ||
+		gid == player2_building_2_tiledID ||
+		gid == player2_building_3_tiledID)
+	{
+		return player2;
+	}
 }

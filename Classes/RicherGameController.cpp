@@ -177,6 +177,10 @@ void RicherGameController::handlePropEvent()
 				__String *str = __String::createWithFormat("%d-%d-%d-%d", MSG_BUY_LAND_1_TAG, x, y, _richerPlayer->getTag());
 				Util::sendCustomEvent(RICHER_MSG, str);
 			}
+			else {
+				__String *str = __String::createWithFormat("%d-%d-%d-%d", MSG_PAY_TOLLS_1_TAG, x, y, _richerPlayer->getTag());
+				Util::sendCustomEvent(RICHER_MSG, str);
+			}
 			break;
 		}
 
@@ -187,12 +191,23 @@ void RicherGameController::handlePropEvent()
 				__String *str = __String::createWithFormat("%d-%d-%d-%d", MSG_BUY_LAND_2_TAG, x, y, _richerPlayer->getTag());
 				Util::sendCustomEvent(RICHER_MSG, str);
 			}
+			else {
+				__String *str = __String::createWithFormat("%d-%d-%d-%d", MSG_PAY_TOLLS_2_TAG, x, y, _richerPlayer->getTag());
+				Util::sendCustomEvent(RICHER_MSG, str);
+			}
 			break;
 		}
 
 		if (titleId == GameBaseScene::player1_building_3_tiledID)
 		{
-			Util::sendCustomEvent(RICHER_CONTROLLER_MSG, __String::createWithFormat("%d", MSG_PICKONE_TOGO_TAG));
+			if (_richerPlayer->getTag() != PLAYER_1_TAG)
+			{
+				__String *str = __String::createWithFormat("%d-%d-%d-%d", MSG_PAY_TOLLS_3_TAG, x, y, _richerPlayer->getTag());
+				Util::sendCustomEvent(RICHER_MSG, str);
+			}
+			else {
+				Util::sendCustomEvent(RICHER_CONTROLLER_MSG, __String::createWithFormat("%d", MSG_PICKONE_TOGO_TAG));
+			}
 			break;
 		}
 
@@ -201,6 +216,10 @@ void RicherGameController::handlePropEvent()
 			if (_richerPlayer->getTag() == PLAYER_2_TAG)
 			{
 				__String *str = __String::createWithFormat("%d-%d-%d-%d", MSG_BUY_LAND_1_TAG, x, y, _richerPlayer->getTag());
+				Util::sendCustomEvent(RICHER_MSG, str);
+			}
+			else {
+				__String *str = __String::createWithFormat("%d-%d-%d-%d", MSG_PAY_TOLLS_1_TAG, x, y, _richerPlayer->getTag());
 				Util::sendCustomEvent(RICHER_MSG, str);
 			}
 			break;
@@ -213,12 +232,24 @@ void RicherGameController::handlePropEvent()
 				__String *str = __String::createWithFormat("%d-%d-%d-%d", MSG_BUY_LAND_2_TAG, x, y, _richerPlayer->getTag());
 				Util::sendCustomEvent(RICHER_MSG, str);
 			}
+			else {
+				__String *str = __String::createWithFormat("%d-%d-%d-%d", MSG_PAY_TOLLS_2_TAG, x, y, _richerPlayer->getTag());
+				Util::sendCustomEvent(RICHER_MSG, str);
+			}
 			break;
 		}
 
 		if (titleId == GameBaseScene::player2_building_3_tiledID)
 		{
-			Util::sendCustomEvent(RICHER_CONTROLLER_MSG, __String::createWithFormat("%d", MSG_PICKONE_TOGO_TAG));
+			if (_richerPlayer->getTag() != PLAYER_2_TAG)
+			{
+				__String *str = __String::createWithFormat("%d-%d-%d-%d", MSG_PAY_TOLLS_3_TAG, x, y, _richerPlayer->getTag());
+				Util::sendCustomEvent(RICHER_MSG, str);
+			}
+			else {
+				Util::sendCustomEvent(RICHER_CONTROLLER_MSG, __String::createWithFormat("%d", MSG_PICKONE_TOGO_TAG));
+			}
+
 			break;
 		}
 	}
