@@ -663,25 +663,28 @@ void GameBaseScene::payTolls(int payTag, float x, float y, int playerTag)
 		money = LAND_LEVEL_2_MONEY;
 	}
 
-	Point pointOfGL = Util::map2GL(Vec2(x, y), GameBaseScene::_map);
-	Sprite *sp = landLayer->getTileAt(Vec2(x, y));
+	//Point pointOfGL = Util::map2GL(Vec2(x, y), GameBaseScene::_map);
+	//Sprite *sp = landLayer->getTileAt(Vec2(x, y));
 
-	sp->runAction(Sequence::create(landFadeOut, landFadeIn, NULL));
+	//sp->runAction(Sequence::create(landFadeOut, landFadeIn, NULL));
+	displayVector.clear();
 
 	RicherPlayer *landOwner = getPlayerByTiled(buy_land_x, buy_land_y);
 	switch (playerTag)
 	{
 	case PLAYER_1_TAG:
 	{
-		refreshMoneyLabel(landOwner, money);
-		refreshMoneyLabel(player1, -money);
+		int retMoney = displayArea(x, y, player1, player2_building_1_tiledID, player2_building_2_tiledID, player2_building_3_tiledID);
+		refreshMoneyLabel(landOwner, money + retMoney);
+		refreshMoneyLabel(player1, -(money + retMoney));
 		Util::sendCustomEvent(RICHER_CONTROLLER_MSG, __String::createWithFormat("%d", MSG_PICKONE_TOGO_TAG));
 		break;
 	}
 	case PLAYER_2_TAG:
 	{
-		refreshMoneyLabel(landOwner, money);
-		refreshMoneyLabel(player2, -money);
+		int retMoney = displayArea(x, y, player2, player1_building_1_tiledID, player1_building_2_tiledID, player1_building_3_tiledID);
+		refreshMoneyLabel(landOwner, money + retMoney);
+		refreshMoneyLabel(player2, -(money + retMoney));
 		Util::sendCustomEvent(RICHER_CONTROLLER_MSG, __String::createWithFormat("%d", MSG_PICKONE_TOGO_TAG));
 		break;
 	}
@@ -705,4 +708,129 @@ RicherPlayer * GameBaseScene::getPlayerByTiled(float x, float y)
 	{
 		return player2;
 	}
+}
+
+int GameBaseScene::displayArea(float x, float y, RicherPlayer * player, int building_1_tiledID, int building_2_tiledID, int building_3_tiledID)
+{
+	int sumMoney = 0;
+	float retX = Util::GL2map(player->getPosition(), _map).x;
+	if (x == retX)
+	{
+		float leftX = x - 1;
+		float rightX = x + 1;
+		int leftGID = landLayer->getTileGIDAt(Vec2(leftX, y));
+		int rightGID = landLayer->getTileGIDAt(Vec2(rightX, y));
+		displayVector.pushBack(landLayer->getTileAt(Vec2(x, y)));
+		while (leftGID != 0 && (leftGID == building_1_tiledID || leftGID == building_2_tiledID || leftGID == building_3_tiledID))
+		{
+			if (leftGID == building_1_tiledID)
+			{
+				sumMoney += LAND_BLANK_MONEY;
+			}
+			if (leftGID == building_2_tiledID)
+			{
+				sumMoney += LAND_LEVEL_1_MONEY;
+			}
+			if (leftGID == building_3_tiledID)
+			{
+				sumMoney += LAND_LEVEL_2_MONEY;
+			}
+			displayVector.pushBack(landLayer->getTileAt(Vec2(leftX, y)));
+			leftX -= 1;
+			leftGID = landLayer->getTileGIDAt(Vec2(leftX, y));
+
+			if (leftGID == 0)
+			{
+				break;
+			}
+			log("leftGID: %d", leftGID);
+		}
+		while (rightGID != 0 && (rightGID == building_1_tiledID || rightGID == building_2_tiledID || rightGID == building_3_tiledID))
+		{
+			if (rightGID == building_1_tiledID)
+			{
+				sumMoney += LAND_BLANK_MONEY;
+			}
+			if (rightGID == building_2_tiledID)
+			{
+				sumMoney += LAND_LEVEL_1_MONEY;
+			}
+			if (rightGID == building_3_tiledID)
+			{
+				sumMoney += LAND_LEVEL_2_MONEY;
+			}
+			displayVector.pushBack(landLayer->getTileAt(Vec2(rightX, y)));
+			rightX += 1;
+			rightGID = landLayer->getTileGIDAt(Vec2(rightX, y));
+
+			if (rightGID == 0)
+			{
+				break;
+			}
+			log("rightGID: %d", rightGID);
+		}
+	}
+
+	float retY = Util::GL2map(player->getPosition(), _map).y;
+	if (y == retY)
+	{
+		float upY = y - 1;
+		float downY = y + 1;
+		int upGID = landLayer->getTileGIDAt(Vec2(x, upY));
+		int downGID = landLayer->getTileGIDAt(Vec2(x, downY));
+		displayVector.pushBack(landLayer->getTileAt(Vec2(x, y)));
+		while (upGID != 0 && (upGID == building_1_tiledID || upGID == building_2_tiledID || upGID == building_3_tiledID))
+		{
+			if (upGID == building_1_tiledID)
+			{
+				sumMoney += LAND_BLANK_MONEY;
+			}
+			if (upGID == building_2_tiledID)
+			{
+				sumMoney += LAND_LEVEL_1_MONEY;
+			}
+			if (upGID == building_3_tiledID)
+			{
+				sumMoney += LAND_LEVEL_2_MONEY;
+			}
+			displayVector.pushBack(landLayer->getTileAt(Vec2(x, upY)));
+			upY -= 1;
+			upGID = landLayer->getTileGIDAt(Vec2(x, upY));
+			if (upGID == 0)
+			{
+				break;
+			}
+			log("upGID: %d", upGID);
+		}
+		while (downGID != 0 && (downGID == building_1_tiledID || downGID == building_2_tiledID || downGID == building_3_tiledID))
+		{
+			if (downGID == building_1_tiledID)
+			{
+				sumMoney += LAND_BLANK_MONEY;
+			}
+			if (downGID == building_2_tiledID)
+			{
+				sumMoney += LAND_LEVEL_1_MONEY;
+			}
+			if (downGID == building_3_tiledID)
+			{
+				sumMoney += LAND_LEVEL_2_MONEY;
+			}
+			displayVector.pushBack(landLayer->getTileAt(Vec2(x, downY)));
+			downY += 1;
+			downGID = landLayer->getTileGIDAt(Vec2(x, downY));
+			if (downGID == 0)
+			{
+				break;
+			}
+			log("downGID: %d", downGID);
+		}
+	}
+
+	for (auto it = displayVector.begin(); it != displayVector.end(); it++)
+	{
+		(Sprite*)(*it)->runAction(Sequence::create(landFadeOut->clone(), landFadeIn->clone(), NULL));
+	}
+
+	return sumMoney;
 }

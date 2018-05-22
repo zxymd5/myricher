@@ -109,6 +109,8 @@ private:
 	char money2[20];
 	void payTolls(int payTag, float x, float y, int playerTag);
 	RicherPlayer *getPlayerByTiled(float x, float y);
+	Vector<Sprite*> displayVector;
+	int displayArea(float x, float y, RicherPlayer *player, int building_1_tiledID, int building_2_tiledID, int building_3_tiledID);
 };
 
 #endif
